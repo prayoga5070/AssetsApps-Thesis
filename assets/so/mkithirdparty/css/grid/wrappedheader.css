@@ -1,0 +1,9 @@
+/*css untuk word wrap judul di grid header*/
+.ui-jqgrid .ui-jqgrid-htable th div {
+height:auto !important;
+overflow:hidden;
+padding-right:4px;
+padding-top:2px;
+position:relative;
+vertical-align:text-top;
+white-space:normal !important;}
