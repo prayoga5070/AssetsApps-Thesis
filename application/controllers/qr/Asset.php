@@ -13,10 +13,12 @@ class Asset extends CI_Controller
             return redirect(base_url('auth'));
         }
 
-        if ($this->session->userdata('logged_in')['dept'] != 8 &&
-            $this->session->userdata('logged_in')['dept'] != 3 && 
-            $this->session->userdata('logged_in')['dept'] != 6 ) {
-                return redirect(base_url('qr/user/asset'));
+        if (
+            $this->session->userdata('logged_in')['dept'] != 8 &&
+            $this->session->userdata('logged_in')['dept'] != 3 &&
+            $this->session->userdata('logged_in')['dept'] != 6
+        ) {
+            return redirect(base_url('qr/user/asset'));
         }
     }
 
@@ -31,7 +33,86 @@ class Asset extends CI_Controller
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
+    public function tableData()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+            $row[] =  '<img src="' . base_url('qr/asset/qr_code/' . $list['qrcode']) . '">';
+            $button = '';
+            $button .= ' <div class="btn-group mb-4 btn-group-sm">
+                                            
+            <a href="' . base_url('qr/asset/edit/' . encode_id($list['id'])) . '" 
+            class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                            
+            <a href="' . base_url('qr/asset/detail/' . encode_id($list['id'])) . '" 
+            class="btn btn-info"><i class="fa fa-info"></i> Detail</a>';
+            if ($_SESSION ["logged_in"] ["dept"] == 6) {
+                $button .= '<a href=" '. base_url('qr/asset/delete/'.encode_id($list['id'])) . '"
+                 class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>';
+            }
 
+            $button .= '</div>';
+            $row[] =  $button;
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataRekap()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+            $row[] =  $list['location'];
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataDashboard()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['user'];
+            $row[] =  $list['location'];
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
     public function add()
     {
         $this->load->view('qr/template/header');
@@ -48,16 +129,16 @@ class Asset extends CI_Controller
         );
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/edit',$data);
+        $this->load->view('qr/admin/edit', $data);
         $this->load->view('qr/template/footer');
     }
 
     public function qr_code($qrcode)
-    {   
+    {
         // Edit : Params with link QR
         // get path assets
         $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
-        $param = $path."/".$qrcode;
+        $param = $path . "/" . $qrcode;
         qrcode::png(
             $param,
             $outfile = false,
@@ -104,19 +185,19 @@ class Asset extends CI_Controller
             );
             $this->db->insert('3_asset', $data);
             $id = $this->db->insert_id();
-          
+
             if (!empty($_FILES['fileupload']['name'])) {
-				$upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
-				$data1 = [
+                $upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
+                $data1 = [
                     'id_asset' => $id,
-					'file_path' => $upload['path_min'],
-					'file_name' => $upload['name'],
-                    'created_at' => date('Y-m-d H:i:s'), 
+                    'file_path' => $upload['path_min'],
+                    'file_name' => $upload['name'],
+                    'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'deleted_at' => NULL, 
-				];
+                    'deleted_at' => NULL,
+                ];
                 $this->db->insert('3_file_asset', $data1);
-			}
+            }
 
             $raw = array(
                 'id_asset' => $id,
@@ -171,17 +252,17 @@ class Asset extends CI_Controller
             $this->db->update('3_asset', $data);
 
             if (!empty($_FILES['fileupload']['name'])) {
-				$upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
-				$data1 = [
+                $upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
+                $data1 = [
                     'id_asset' => $id,
-					'file_path' => $upload['path_min'],
-					'file_name' => $upload['name'],
-                    'created_at' => date('Y-m-d H:i:s'), 
+                    'file_path' => $upload['path_min'],
+                    'file_name' => $upload['name'],
+                    'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'deleted_at' => NULL, 
-				];
+                    'deleted_at' => NULL,
+                ];
                 $this->db->insert('3_file_asset', $data1);
-			}
+            }
 
             $raw = array(
                 'id_asset' => $id,
@@ -203,7 +284,7 @@ class Asset extends CI_Controller
             $this->load->view('qr/template/sidebar_admin');
             $this->load->view('qr/admin/edit');
             $this->load->view('qr/template/footer');
-        }      
+        }
     }
 
     public function delete($id)
