@@ -73,7 +73,9 @@ class Asset_model extends CI_Model
       (isset($request['kodeAsset'])&&$request['kodeAsset']!='') || 
       (isset($request['nameAsset'])&&$request['nameAsset']!='')||
       (isset($request['statusAsset'])&&$request['statusAsset']!='')||
-      (isset($request['userAsset'])&&$request['userAsset']!=''))
+      (isset($request['userAsset'])&&$request['userAsset']!='')||
+      (isset($request['locationAsset'])&&$request['locationAsset']!=''))
+      
     {
       $sWhere .= ' where ';
       if(  (isset($request['kodeAsset'])&&$request['kodeAsset']!='')){

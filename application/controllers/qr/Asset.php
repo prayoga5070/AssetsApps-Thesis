@@ -24,13 +24,13 @@ class Asset extends CI_Controller
 
     public function setup()
     {
-        $data = array(
-            'get_all_asset' => $this->Asset_model->get_all_asset()
-        );
+        // $data = array(
+        //     'get_all_asset' => $this->Asset_model->get_all_asset()
+        // );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/asset', $data);
+        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/admin/asset');
         $this->load->view('qr/template/footer');
     }
     public function tableData()
@@ -59,6 +59,35 @@ class Asset extends CI_Controller
             }
 
             $button .= '</div>';
+            $row[] =  $button;
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataLog()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+         
+            $button = '';
+            $button .= '  <div class="btn-group btn-group-sm">
+            <a href="'. base_url( 'qr/report/log_detail/'.encode_id($list['id'])).'" 
+            class="btn btn-info btn-sm"><i class="fa fa-info"></i> Log Detail</a>
+            </div>';
+            
             $row[] =  $button;
             $resultDatas[] = $row;
         }

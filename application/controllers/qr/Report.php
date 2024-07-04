@@ -14,23 +14,23 @@ class Report extends CI_Controller {
 
     public function index()
     {
-        $data = array(
-            'assets' => $this->Asset_model->get_all_asset(),
-        );
+        // $data = array(
+        //     'assets' => $this->Asset_model->get_all_asset(),
+        // );
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin');
-        $this->load->view('qr/admin/report', $data);
+        $this->load->view('qr/admin/report');
         $this->load->view('qr/template/footer');
     }
 
     public function log()
     {
-        $data = array(
-            'assets' => $this->Asset_model->get_all_asset(),
-        );
+        // $data = array(
+        //     'assets' => $this->Asset_model->get_all_asset(),
+        // );
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin');
-        $this->load->view('qr/admin/log',$data);
+        $this->load->view('qr/admin/log');
         $this->load->view('qr/template/footer');
     }
 

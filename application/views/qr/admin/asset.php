@@ -87,7 +87,7 @@
         <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
         <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
     </div>
-
+    <div><br /></div>
     <!-- Left col -->
     <section class="col-lg-12">
         <!-- Custom tabs (Charts with tabs)-->
