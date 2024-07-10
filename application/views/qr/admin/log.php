@@ -31,60 +31,6 @@
         </div>
 <!-- Main row -->
 <div class="row">
-<div class="col-lg-12">
-        <form id="filter">
-            <div class="row">
-                <div class=" col-md-6">
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Kode Asset</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="kodeAsset" class="form-control ">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="nameAsset" class="form-control ">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class=" col-md-6">
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Status</label>
-                            <div class="col-sm-9">
-
-                                <select id="status-data" name="statusAsset" class="form-control select2">
-                                    <option value="">-- ALL STATUS --</option>
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">User</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="userAsset" class="form-control ">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </form>
-    </div>
-    <div class="col-lg-12 mt-3">
-        <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-        <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-        <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-    </div>
-    <div><br /></div>
     <!-- Left col -->
     <section class="col-lg-12">
         <!-- Custom tabs (Charts with tabs)-->
@@ -95,7 +41,7 @@
                     Data Assets
                 </h3>
                 <div class="card-body">
-                    <table id="asset1" class="table table-bordered table-striped">
+                    <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Kode Asset</th>
@@ -106,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <?php
+                            <?php
                             $no = 1;
                             foreach ($assets as $row) {
                             ?>
@@ -121,7 +67,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            <?php } ?> -->
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div><!-- /.card-body -->
@@ -135,55 +81,3 @@
 </section>
 <!-- /.content -->
 </div>
-<? $this->section('js_content') ?>
-<script>
-$(document).ready(function () {
-    list();
-    $('#asset1').on('length.dt', function (e, settings, len) {
-      localStorage.dataTablePageLength = len;
-    });
-
-  });
-
-    function list() {
-        if (localStorage.dataTablePageLength) {
-            pageLength = localStorage.dataTablePageLength;
-        } else {
-            pageLength = 10;
-        }
-        $table = $("#asset1").find('tbody');
-        if ($.fn.DataTable.isDataTable("#asset1")) {
-            $('#asset1').DataTable().clear().destroy();
-        }
-        var table = $("#asset1").DataTable({
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "processing": true,
-            "serverSide": true,
-            "language": {
-                "infoFiltered": ""
-            },
-
-            "ajax": {
-                "url": '<?= base_url() ?>' + 'qr/asset/tableData',
-                "type": "POST",
-                "data": function(d) {
-                    return $.extend({}, d, {
-                        "statusAsset": $('#statusAsset').val(),
-                        "nameAsset": $('#nameAsset').val(),
-                        "kodeAsset": $('#kodeAsset').val(),
-                        "userAsset": $('#userAsset').val()
-                    });
-                }
-            },
-        });
-    }
-
-    function resetForm() {
-        document.getElementById("filter").reset();
-
-        list();
-    }
-</script>
-<? $this->endSection() ?>
