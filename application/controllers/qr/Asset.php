@@ -142,7 +142,115 @@ class Asset extends CI_Controller
             $this->load->view('qr/template/footer');
         }
     }
+    public function tableData()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+            $row[] =  '<img src="' . base_url('qr/asset/qr_code/' . $list['qrcode']) . '">';
+            $button = '';
+            $button .= ' <div class="btn-group mb-4 btn-group-sm">
+                                            
+            <a href="' . base_url('qr/asset/edit/' . encode_id($list['id'])) . '" 
+            class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                            
+            <a href="' . base_url('qr/asset/detail/' . encode_id($list['id'])) . '" 
+            class="btn btn-info"><i class="fa fa-info"></i> Detail</a>';
+            if ($_SESSION ["logged_in"] ["dept"] == 6) {
+                $button .= '<a href=" '. base_url('qr/asset/delete/'.encode_id($list['id'])) . '"
+                 class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>';
+            }
 
+            $button .= '</div>';
+            $row[] =  $button;
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataLog()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+         
+            $button = '';
+            $button .= '  <div class="btn-group btn-group-sm">
+            <a href="'. base_url( 'qr/report/log_detail/'.encode_id($list['id'])).'" 
+            class="btn btn-info btn-sm"><i class="fa fa-info"></i> Log Detail</a>
+            </div>';
+            
+            $row[] =  $button;
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataRekap()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['status'];
+            $row[] =  $list['user'];
+            $row[] =  $list['location'];
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+    public function tableDataDashboard()
+    {
+        
+        $resultDatas = [];
+        $data = $this->Asset_model->GetData($_REQUEST);
+        foreach ($data['data'] as $list) {
+            $row = [];
+            $row[] = $list['code'];
+            $row[] =  $list['name'];
+            $row[] =  $list['user'];
+            $row[] =  $list['location'];
+            $resultDatas[] = $row;
+        }
+        $output = [
+            'draw' => $_REQUEST['draw'],
+            'recordsTotal' => $data['totalRecord'],
+            'recordsFiltered' => $data['totalRecord'],
+            'data' => $resultDatas,
+        ];
+        echo json_encode($output, JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
     public function update()
     {
         $this->form_validation->set_rules('code', 'Code Asset', 'required');
