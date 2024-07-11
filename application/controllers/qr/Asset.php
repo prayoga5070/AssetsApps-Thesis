@@ -2,6 +2,10 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require 'vendor/autoload.php';
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Asset extends CI_Controller
 {
 
@@ -24,13 +28,13 @@ class Asset extends CI_Controller
 
     public function setup()
     {
-        $data = array(
-            'get_all_asset' => $this->Asset_model->get_all_asset()
-        );
+        // $data = array(
+        //     'get_all_asset' => $this->Asset_model->get_all_asset()
+        // );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/asset', $data);
+        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/admin/asset');
         $this->load->view('qr/template/footer');
     }
 
@@ -68,7 +72,11 @@ class Asset extends CI_Controller
             $margin = 1
         );
     }
-
+    function random_alphanumeric_string($length)
+    {
+        $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        return substr(str_shuffle($chars), 0, $length);
+    }
     public function post()
     {
 
@@ -82,12 +90,8 @@ class Asset extends CI_Controller
 
         if ($this->form_validation->run() != false) {
             //Setup Generate QRCode
-            function random_alphanumeric_string($length)
-            {
-                $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-                return substr(str_shuffle($chars), 0, $length);
-            }
-            $random = random_alphanumeric_string(5);
+
+            $random = $this->random_alphanumeric_string(5);
             $id_user = $this->session->userdata('logged_in')['id'];
 
             $data = array(
@@ -144,7 +148,7 @@ class Asset extends CI_Controller
     }
     public function tableData()
     {
-        
+
         $resultDatas = [];
         $data = $this->Asset_model->GetData($_REQUEST);
         foreach ($data['data'] as $list) {
@@ -162,8 +166,8 @@ class Asset extends CI_Controller
                                             
             <a href="' . base_url('qr/asset/detail/' . encode_id($list['id'])) . '" 
             class="btn btn-info"><i class="fa fa-info"></i> Detail</a>';
-            if ($_SESSION ["logged_in"] ["dept"] == 6) {
-                $button .= '<a href=" '. base_url('qr/asset/delete/'.encode_id($list['id'])) . '"
+            if ($_SESSION["logged_in"]["dept"] == 6) {
+                $button .= '<a href=" ' . base_url('qr/asset/delete/' . encode_id($list['id'])) . '"
                  class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>';
             }
 
@@ -181,7 +185,7 @@ class Asset extends CI_Controller
     }
     public function tableDataLog()
     {
-        
+
         $resultDatas = [];
         $data = $this->Asset_model->GetData($_REQUEST);
         foreach ($data['data'] as $list) {
@@ -190,13 +194,13 @@ class Asset extends CI_Controller
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
-         
+
             $button = '';
             $button .= '  <div class="btn-group btn-group-sm">
-            <a href="'. base_url( 'qr/report/log_detail/'.encode_id($list['id'])).'" 
+            <a href="' . base_url('qr/report/log_detail/' . encode_id($list['id'])) . '" 
             class="btn btn-info btn-sm"><i class="fa fa-info"></i> Log Detail</a>
             </div>';
-            
+
             $row[] =  $button;
             $resultDatas[] = $row;
         }
@@ -210,7 +214,7 @@ class Asset extends CI_Controller
     }
     public function tableDataRekap()
     {
-        
+
         $resultDatas = [];
         $data = $this->Asset_model->GetData($_REQUEST);
         foreach ($data['data'] as $list) {
@@ -232,7 +236,7 @@ class Asset extends CI_Controller
     }
     public function tableDataDashboard()
     {
-        
+
         $resultDatas = [];
         $data = $this->Asset_model->GetData($_REQUEST);
         foreach ($data['data'] as $list) {
@@ -366,6 +370,203 @@ class Asset extends CI_Controller
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin');
         $this->load->view('qr/admin/view', $data);
+        $this->load->view('qr/template/footer');
+    }
+    public function downloadTemplate()
+    {
+        $spreadsheet = new Spreadsheet();
+        $fileName = "templateAsset.xlsx";
+        $writer = new Xlsx($spreadsheet);
+        $header = [
+            array(
+                "Kode Asset",
+                "Nama Asset",
+                "Year Acquisation",
+                "Status",
+                "User",
+                "Location",
+                "Description",
+            )
+        ];
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+        $activeWorksheet->fromArray($header, NULL, 'A1');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . urlencode($fileName) . '"');
+        $writer->save('php://output');
+    }
+    public function uploadFotos()
+    {
+        $assetModel = new Asset_model();
+        $originfile = null;
+        if ($_FILES) {
+            $originfile = $_FILES['fileFoto'];
+        }
+        $path = 'uploads/assetsqr/';
+        $countFile = 0;
+
+        $notFounded = "";
+        if (isset($originfile) && $originfile['name'][0] !== '') {
+            if (is_array($originfile)) {
+                for ($i = 0; $i < sizeOf($originfile['name']); $i++) {
+                    $originFileName = str_replace(" ", "_", $originfile['name'][$i]);
+                    $filenameList = (explode(".", $originfile['name'][$i]));
+                    $filesize = $originfile['size'][$i];
+                    $tempFile = $originfile['tmp_name'][$i] . '/' . $originfile['name'][$i];
+
+                    $dataDetail = $assetModel->asset_code($filenameList[0]);
+                    if (isset($dataDetail)) {
+                        $year = date("Y");
+                        $month = date("m");
+                        $date = date("d");
+                        $hour = date("H");
+                        $minutes = date("i");
+                        $second = date("s");
+                        $newName = $date . "" . $month . "" . $year . "" . $hour . "" . $minutes . "" . $second . "_" . $originFileName;
+                        $dirFile = $path . $year . "-" . $month . "-" . $date  . "/";
+                        if (!file_exists($dirFile)) {
+                            mkdir($dirFile, 0777, true);
+                        }
+                        move_uploaded_file($originfile['tmp_name'][$i], $dirFile . $newName);
+                        // $filepathSave=
+                        $data1 = [
+                            'id_asset' => $dataDetail->id,
+                            'file_path' => trim($dirFile, "/"),
+                            'file_name' => $newName,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'deleted_at' => NULL,
+                        ];
+                        $this->db->insert('3_file_asset', $data1);
+                        $countFile++;
+                    } else {
+                        $notFounded .= "File Foto dengan Kode Asset " . $filenameList[0] . " Tidak Ditemukan";
+                        $notFounded .= '<br/>';
+                    }
+                }
+            }
+        }
+
+        //result untuk notif
+        $data = [];
+        $data['notif'] = 'Upload ' . $countFile . ' File Success';
+        if (isset($notFounded)) {
+            $data['notif'] .= '<br/>';
+            $data['notif'] .= '<br/>';
+            $data['notif'] .= $notFounded;
+        }
+        $this->load->view('qr/template/header');
+        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/admin/asset', $data);
+        $this->load->view('qr/template/footer');
+    }
+    public function uploadExcel()
+    {
+        $assetModel = new Asset_model();
+        $counterSaved = 0;
+        $notFounded = "";
+        $originfile = null;
+        if ($_FILES) {
+            $originfile = $_FILES['fileExcel'];
+        }
+        $header = [
+            array(
+                "Kode Asset",
+                "Nama Asset",
+                "Year Acquisation",
+                "Status",
+                "User",
+                "Location",
+                "Description",
+            )
+        ];
+        if (isset($originfile) && $originfile['name'] !== '') {
+            if (is_array($originfile)) {
+                $allowed_mime_type_arr = array(
+                    'application/vnd.ms-excel', // For file .xls
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // For file .xlsx
+                    'text/csv' // For file .csv
+                );
+                $counter = 0;
+
+                if (isset($originfile['name']) && $originfile['name'] != "") {
+                    if (in_array($originfile['type'], $allowed_mime_type_arr, true) == true) {
+                        $arr_file = explode('.', $originfile['name']);
+                        $extension = end($arr_file);
+                        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                        $spreadsheet = $reader->load($originfile['tmp_name']);
+                        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+                        if ($sheetData[0] == $header[0]) {
+                            foreach ($sheetData as $dataloop) {
+                                $counter++;
+                                if ($counter == 1) {
+                                    continue;
+                                }
+                                if ((!isset($dataloop[0])
+                                    || $dataloop[0] == '')) {
+                                        $notFounded .= "Kode Asset In Row " . ($counter - 1) . " Tidak Terisi";
+                                        $notFounded .= "<br/>";
+                                        continue;
+                                }
+                                $dataDetail = $assetModel->asset_code($dataloop[0]);
+                                if (isset($dataDetail)) {
+                                    $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " Already Exist";
+                                    $notFounded .= "<br/>";
+                                    continue;
+                                }
+                                if ((isset($dataloop[4])
+                                    && $dataloop[4] != '')) {
+                                    if ((!isset($dataloop[5]))) {
+                                        $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " location tidak terisi";
+                                        $notFounded .= "<br/>";
+                                        continue;
+                                    }
+                                }
+                                if ((isset($dataloop[5]) && $dataloop[5] != '')) {
+                                    if (!isset($dataloop[4])) {
+                                        $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " User tidak terisi";
+                                        $notFounded .= "<br/>";
+                                        continue;
+                                    }
+                                }
+                                $random = $this->random_alphanumeric_string(5);
+                                $id_user = $this->session->userdata('logged_in')['id'];
+                                $data = array(
+                                    'code' => $dataloop[0],
+                                    'name' => $dataloop[1],
+                                    'year_acq' => $dataloop[2],
+                                    'status' => $dataloop[3],
+                                    'user' => $dataloop[4],
+                                    'location' => $dataloop[5],
+                                    'qrcode' => $random,
+                                    'description' => $dataloop[6],
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                    'deleted_at' => NULL,
+                                    'id_user' => $id_user
+                                );
+                                // $this->db->insert('3_asset', $data);
+                                $counterSaved++;
+                            }
+                        } else {
+                            $notFounded .= "Invalid Format Excel";
+                        }
+                    } else {
+                        $notFounded .= "Invalid Format Excel";
+                    }
+                } else {
+                }
+            }
+        }
+        $data = [];
+        $data['notif'] =  $counterSaved . ' Data File Success ';
+        if (isset($notFounded)) {
+            $data['notif'] .= '<br/>';
+            $data['notif'] .= '<br/>';
+            $data['notif'] .= $notFounded;
+        }
+        $this->load->view('qr/template/header');
+        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
 }

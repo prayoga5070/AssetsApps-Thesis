@@ -30,66 +30,73 @@
                         </div>
                 </a>
             </div>
-            </div>
-        <?php } ?>
+</div>
+<?php } ?>
 <!-- Main row -->
 <div class="row">
     <!-- Left col -->
     <section class="col-lg-12">
-    <div class="col-lg-12">
-    <form id="filter">
-            <div class="row">
-                <div class=" col-md-6">
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Kode Asset</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="kodeAsset" class="form-control ">
+        <div class="col-lg-12">
+            <form id="filter">
+                <div class="row">
+                    <div class=" col-md-6">
+                        <div class="form-group row">
+                            <div class="input-group">
+                                <label class="col-md-3">Kode Asset</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="kodeAsset" class="form-control ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group">
+                                <label class="col-md-3">Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="nameAsset" class="form-control ">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="nameAsset" class="form-control ">
+                    <div class=" col-md-6">
+                        <div class="form-group row">
+                            <div class="input-group">
+                                <label class="col-md-3">Status</label>
+                                <div class="col-sm-9">
+
+                                    <select id="status-data" name="statusAsset" class="form-control select2">
+                                        <option value="">-- ALL STATUS --</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group">
+                                <label class="col-md-3">User</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="userAsset" class="form-control ">
+                                </div>
+
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <div class=" col-md-6">
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">Status</label>
-                            <div class="col-sm-9">
+            </form>
+        </div>
+        <div class="col-lg-12 mt-3">
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadData">Upload Data</button>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadFoto">Upload Foto</button>
+        </div>
+        <div class="col-lg-12 mt-3">
+            <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
+            <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
 
-                                <select id="status-data" name="statusAsset" class="form-control select2">
-                                    <option value="">-- ALL STATUS --</option>
+        
 
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <label class="col-md-3">User</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="userAsset" class="form-control ">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </form>
-    </div>
-    <div class="col-lg-12 mt-3">
-        <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-        <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-        <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-    </div>
-    <div><br /></div>
+        </div>
+        <div><br /></div>
         <!-- Custom tabs (Charts with tabs)-->
         <div class="card">
             <div class="card-header">
@@ -109,7 +116,7 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        
+
                     </table>
                 </div><!-- /.card-body -->
             </div>
@@ -121,14 +128,109 @@
 </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<script>
-$(document).ready(function () {
-    list();
-    $('#asset1').on('length.dt', function (e, settings, len) {
-      localStorage.dataTablePageLength = len;
-    });
 
-  });
+<div class="modal fade none-border" id="uploadData">
+    <div class="modal-dialog">
+        <form method="post" autocomplete="off" action="<?= base_url() ?>qr/asset/uploadExcel" enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);padding-bottom:25px;color:black;padding-top:15px;padding-left:20px;margin-bottom:0%">
+                    <h4 class="modal-title" style="color:white"><strong>Upload Data With Excel</strong></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" id="uploadDataPopup">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="downloadForm()">Download Template</button>
+                            <div><br /></div>
+                            <input type="file" id="fileExcel" name="fileExcel">
+                            <div><br /></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);margin-bottom:0%">
+                    <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade none-border" id="uploadFoto">
+    <div class="modal-dialog">
+        <form method="post" autocomplete="off" action="<?= base_url() ?>qr/asset/uploadFotos" enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);padding-bottom:25px;color:black;padding-top:15px;padding-left:20px;margin-bottom:0%">
+                    <h4 class="modal-title" style="color:white"><strong>Upload Foto</strong></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" id="uploadFotoPopup">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>MOHON PERIKSA KEMBALI DATA YANG DIMASUKKAN. HARAP MASUKKAN KODE ASSET SEBAGAI NAMA FILE.</p>
+                            <input type="file" id="files" name="fileFoto[]" multiple><br><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);margin-bottom:0%">
+                    <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade none-border" id="notif">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);padding-bottom:25px;color:black;padding-top:15px;padding-left:20px;margin-bottom:0%">
+                <h4 class="modal-title" style="color:white"><strong>Notif Upload</strong></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body" >
+                <div class="row">
+                    <div class="col-lg-12" id="notifPopup">
+                        <?= isset($notif) ? $notif : '' ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style=" background: #466368;
+  background: -webkit-linear-gradient(#648880, #293f50);
+  background:    -moz-linear-gradient(#648880, #293f50);
+  background:         linear-gradient(#648880, #293f50);margin-bottom:0%">
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" id="notifToogle" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#notif">Upload Data</button>
+
+<script>
+    $(document).ready(function() {
+        list();
+        $('#asset1').on('length.dt', function(e, settings, len) {
+            localStorage.dataTablePageLength = len;
+        });
+        var errorCheck = $("#notifPopup").html();
+        var CheckTest = errorCheck.toString().replace(/\n|\r/g, "").trim();
+        if (CheckTest != null && CheckTest != "") {
+            document.getElementById("notifToogle").click();
+        }
+    });
 
     function list() {
         if (localStorage.dataTablePageLength) {
@@ -169,6 +271,10 @@ $(document).ready(function () {
         document.getElementById("filter").reset();
 
         list();
+    }
+
+    function downloadForm() {
+        document.location = "<?= base_url(); ?>qr/asset/downloadTemplate";
     }
 </script>
 </div>
