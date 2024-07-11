@@ -21,6 +21,22 @@
              </p>
            </a>
          </li>
+         <li class="nav-item">
+           <a href="<?= base_url(); ?>asset/peminjaman" class="nav-link">
+             <i class="nav-icon fas fa-tachometer-alt"></i>
+             <p>
+               Pengajuan Peminjaman
+             </p>
+           </a>
+         </li>
+         <li class="nav-item">
+           <a href="<?= base_url(); ?>asset/maintenance" class="nav-link">
+             <i class="nav-icon fas fa-tachometer-alt"></i>
+             <p>
+               Pengajuan Maintenance
+             </p>
+           </a>
+         </li>
          <li class="nav-header">MENU</li>
          <li class="nav-item">
            <a href="<?= base_url(); ?>qr/asset/scan" class="nav-link">
@@ -32,7 +48,7 @@
          </li>
          <li class="nav-item">
            <a href="<?= base_url(); ?>qr/asset/setup" class="nav-link">
-            <i class="fas fa-cog"></i>
+             <i class="fas fa-cog"></i>
              <p>
                Konfigurasi Assets
              </p>
@@ -49,7 +65,7 @@
          </li>
          <li class="nav-item">
            <a href="<?= base_url(); ?>qr/report/log" class="nav-link">
-           <i class="fas fa-database"></i>
+             <i class="fas fa-database"></i>
              <p>
                Log Asset
              </p>
