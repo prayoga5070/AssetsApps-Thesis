@@ -569,4 +569,39 @@ class Asset extends CI_Controller
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
+    public function exportToExcel()
+    {
+        $assetModel = new Asset_model();
+        $_REQUEST['length']=-1;
+        $data = $assetModel->GetData($_REQUEST);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Code');
+        $sheet->setCellValue('B1', 'Name');
+        $sheet->setCellValue('C1', 'Status');
+        $sheet->setCellValue('D1', 'User');
+        $sheet->setCellValue('E1', 'Location');
+
+        $row = 2;
+        foreach ($data['data'] as $item) {
+            $sheet->setCellValue('A' . $row, $item['code']);
+            $sheet->setCellValue('B' . $row, $item['name']);
+            $sheet->setCellValue('C' . $row, $item['status']);
+            $sheet->setCellValue('D' . $row, $item['user']);
+            $sheet->setCellValue('E' . $row, $item['location']);
+            $row++;
+        }
+
+        $filename = 'data_export_' . date('Ymd_His') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
 }

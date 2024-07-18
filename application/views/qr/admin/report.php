@@ -31,69 +31,72 @@
         <div class="row">
             <!-- Left col -->
             <section class="col-lg-12">
-            <div class="col-lg-12">
-            <form id="filter">
-                <div class="row">
-                    <div class=" col-md-6">
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Kode Asset</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="kodeAsset" class="form-control ">
+                <div class="col-lg-12">
+                    <form id="filter">
+                        <div class="row">
+                            <div class=" col-md-6">
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Kode Asset</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="kodeAsset" class="form-control ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="nameAsset" class="form-control ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Status</label>
+                                        <div class="col-sm-9">
+
+                                            <select id="status-data" name="statusAsset" class="form-control select2">
+                                                <option value="">-- ALL STATUS --</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Name</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="nameAsset" class="form-control ">
+                            <div class=" col-md-6">
+
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">User</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="userAsset" class="form-control ">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Location</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="locationAsset" class="form-control ">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Status</label>
-                                <div class="col-sm-9">
-
-                                    <select id="status-data" name="statusAsset" class="form-control select2">
-                                        <option value="">-- ALL STATUS --</option>
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class=" col-md-6">
-
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">User</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="userAsset" class="form-control ">
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Location</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="locationAsset" class="form-control ">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class="col-lg-12 mt-3">
-            <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-            <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-        </div>
-        <div><br /></div>
+                <div class="col-lg-12 mt-3">
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="exportToExcel()">Export to Excel</button>
+                </div>
+                <div class="col-lg-12 mt-3">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
+                    <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
+                </div>
+                <div><br /></div>
                 <!-- Custom tabs (Charts with tabs)-->
                 <div class="card">
                     <div class="card-header">
@@ -112,7 +115,7 @@
                                         <th>Location</th>
                                     </tr>
                                 </thead>
-                               
+
                             </table>
                         </div><!-- /.card-body -->
                     </div>
@@ -173,6 +176,49 @@
         document.getElementById("filter").reset();
 
         list();
+    }
+
+    function exportToExcel() {
+
+        var filters = {
+            "statusAsset": $('#statusAsset').val(),
+            "locationAsset": $('#locationAsset').val(),
+            "nameAsset": $('#nameAsset').val(),
+            "kodeAsset": $('#kodeAsset').val(),
+            "userAsset": $('#userAsset').val()
+        };
+
+        $.ajax({
+            url: '<?= base_url() ?>' + 'qr/asset/exportToExcel',
+            type: 'POST',
+            data: filters, // pass the filters to the server
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function(response, status, xhr) {
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                var blob = new Blob([response], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.error('An error occurred while exporting:', error);
+            }
+        });
     }
 </script>
 <!-- /.content -->
