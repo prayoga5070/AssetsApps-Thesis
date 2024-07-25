@@ -24,13 +24,13 @@
     <form action="<?= base_url('asset/peminjaman'); ?>" method="post" class="mb-3">
       <div class="form-row">
         <div class="form-group col-md-6 row ml-auto">
-          <label for="created_at" class="col-sm-2 col-form-label">Nama</label>
+          <label for="created_at" class="col-sm-2 col-form-label">Tanggal</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" name="created_at" id="datepick1">
+            <input type="text" class="form-control" name="created_at" id="datepick1" placeholder="Select date">
           </div>
         </div>
         <div class="form-group col-md-6 row ml-auto">
-          <label for="created_by" class="col-sm-2 col-form-label">User</label>
+          <label for="created_by" class="col-sm-2 col-form-label">Requester</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" name="created_by">
           </div>
@@ -38,7 +38,7 @@
       </div>
       <div class="form-row">
         <div class="form-group col-md-6 row ml-auto">
-          <label for="code" class="col-sm-2 col-form-label">Kategori</label>
+          <label for="code" class="col-sm-2 col-form-label">Kode</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" name="code">
           </div>
