@@ -56,7 +56,7 @@
                                         <div class="form-group row">
                                             <label for="note" class="col-sm-3 col-form-label">Notes</label>
                                             <div class="col-sm-9">
-                                                <textarea type="text" class="form-control" name="note" rows="6"><?php echo set_value('note'); ?>  </textarea>
+                                                <textarea type="text" class="form-control" name="note" rows="6"><?php echo set_value('note'); ?></textarea>
                                                 <?php echo '<div style="color: red;font-size: 14px">' . form_error('note') . '</div>'; ?>
                                             </div>
                                         </div>

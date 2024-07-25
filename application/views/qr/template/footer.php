@@ -10,8 +10,8 @@
  </div>
  <!-- ./wrapper -->
 
- <!-- jQuery -->
- <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery/jquery.min.js"></script>
+ <!-- jQuery Validate -->
+ <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery-validation/jquery.validate.min.js"></script>
  <!-- jQuery UI 1.11.4 -->
  <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery-ui/jquery-ui.min.js"></script>
  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -23,7 +23,7 @@
  <!-- ChartJS -->
  <script src="<?= base_url(); ?>assets/qrcode/plugins/chart.js/Chart.min.js"></script>
  <!-- Sparkline -->
- <script src="<?= base_url(); ?>assets/plugins/sparklines/sparkline.js"></script>
+ <script src="<?= base_url(); ?>assets/qrcode/plugins/sparklines/sparkline.js"></script>
  <!-- JQVMap -->
  <script src="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/jquery.vmap.min.js"></script>
  <script src="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
@@ -86,7 +86,7 @@
        ],
        "dom": '<"top"l>rt<"bottom"ip><"">'
      });
-     $('#datepick1').datepicker({
+     $('.datepick1').datepicker({
        dateFormat: 'yy-mm-dd',
        changeMonth: true,
        changeYear: true,

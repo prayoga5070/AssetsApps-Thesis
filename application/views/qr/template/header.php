@@ -11,6 +11,11 @@ if ($this->session->userdata('logged_in') != true) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AssetsApp | MKI</title>
 
+  <!-- jQuery -->
+  <script src="<?= base_url('assets/qrcode/qrcode/jquery-3.5.1.min.js'); ?>"></script>
+  <!-- Select2 -->
+  <script src="<?= base_url(); ?>assets/qrcode/plugins/select2/js/select2.min.js"></script>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -20,7 +25,7 @@ if ($this->session->userdata('logged_in') != true) {
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/qrcode/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
@@ -37,6 +42,8 @@ if ($this->session->userdata('logged_in') != true) {
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/select2/css/select2.min.css">
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 

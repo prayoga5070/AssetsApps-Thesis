@@ -17,22 +17,15 @@ class Maintenance extends CI_Controller
     {
         $user_id = $this->session->userdata('logged_in')['id'];
 
-        if ($this->input->post()) {
-            // Handle form submission
-            $created_at = $this->input->post('created_at');
-            $created_by = $this->input->post('created_by');
-            $code = $this->input->post('code');
-            $status = $this->input->post('status');
+        $created_at = $this->input->post('created_at');
+        $created_by = $this->input->post('created_by');
+        $code = $this->input->post('code');
+        $status = $this->input->post('status');
 
-            // Redirect with query parameters
+        if ($this->input->post()) {
+
             redirect('asset/maintenance/index?created_at=' . urlencode($created_at) . '&created_by=' . urlencode($created_by) . '&code=' . urlencode($code) . '&status=' . urlencode($status));
         }
-
-        // Retrieve the query parameters for filtering
-        $created_at = $this->input->get('created_at');
-        $created_by = $this->input->get('created_by');
-        $code = $this->input->get('code');
-        $status = $this->input->get('status');
 
         $filter_result = $this->Maintenance_model->get_all_filter(
             $user_id,
@@ -113,24 +106,40 @@ class Maintenance extends CI_Controller
             $asset = $this->Asset_model->asset_code($this->input->post('code'));
 
             if ($asset) {
-                $data = array(
-                    'asset_id' => $asset->id,
-                    'status' => 'Waiting for Maintenance',
-                    'created_by' =>  $user_id,
-                    'created_at' => date('Y-m-d H:i:s'),
-                );
-                $this->db->insert('maintenance', $data);
+                if ($asset->status != 'Active') {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-danger"><strong>Failed! </strong>Asset not active or under maintenance</div>');
+                    $this->load->view('qr/template/header');
+                    $this->load->view('qr/template/sidebar_admin');
+                    $this->load->view('asset/maintenance/add', $data);
+                    $this->load->view('qr/template/footer');
+                } else {
+                    $data = array(
+                        'asset_id' => $asset->id,
+                        'status' => 'Waiting for Maintenance',
+                        'created_by' =>  $user_id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                    );
+                    $this->db->insert('maintenance', $data);
 
-                $maintenance_id = $this->db->insert_id();
-                $notes = array(
-                    'maintenance_id' => $maintenance_id,
-                    'notes' => $this->input->post('note'),
-                    'created_by' =>  $user_id,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'status' => 'Request',
-                );
-                $this->db->insert('maintenance_notes_history', $notes);
-                redirect(base_url('asset/maintenance'));
+                    $maintenance_id = $this->db->insert_id();
+                    $notes = array(
+                        'maintenance_id' => $maintenance_id,
+                        'notes' => $this->input->post('note'),
+                        'created_by' =>  $user_id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'status' => 'Request',
+                    );
+                    $this->db->insert('maintenance_notes_history', $notes);
+
+                    $ass = array(
+                        'status' => 'Maintenance',
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    );
+                    $this->db->where('id', $asset->id);
+                    $this->db->update('3_asset', $ass);
+
+                    redirect(base_url('asset/maintenance'));
+                }
             } else {
                 $this->session->set_flashdata('msg', '<div class="alert alert-danger"><strong>Failed! </strong>Invalid asset code</div>');
                 $this->load->view('qr/template/header');
