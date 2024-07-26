@@ -13,12 +13,10 @@ class Asset extends CI_Controller
             return redirect(base_url('auth'));
         }
 
-        if (
-            $this->session->userdata('logged_in')['dept'] != 8 &&
-            $this->session->userdata('logged_in')['dept'] != 3 &&
-            $this->session->userdata('logged_in')['dept'] != 6
-        ) {
-            return redirect(base_url('qr/user/asset'));
+        if ($this->session->userdata('logged_in')['dept'] != 8 &&
+            $this->session->userdata('logged_in')['dept'] != 3 && 
+            $this->session->userdata('logged_in')['dept'] != 6 ) {
+                return redirect(base_url('qr/user/asset'));
         }
     }
 
@@ -50,17 +48,25 @@ class Asset extends CI_Controller
         );
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/edit', $data);
+        $this->load->view('qr/admin/edit',$data);
         $this->load->view('qr/template/footer');
     }
 
     public function qr_code($qrcode)
-    {
+    {   
         // Edit : Params with link QR
         // get path assets
         $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
-        $param = $path . "/" . $qrcode;
-        qrcode::png(
+        $param = $path."/".$qrcode;
+        // qrcode::png(
+        //     $param,
+        //     $outfile = false,
+        //     $level = QR_ECLEVEL_H,
+        //     $size = 2,
+        //     $margin = 1
+        // );
+
+        echo qrcode::png(
             $param,
             $outfile = false,
             $level = QR_ECLEVEL_H,
@@ -106,19 +112,19 @@ class Asset extends CI_Controller
             );
             $this->db->insert('3_asset', $data);
             $id = $this->db->insert_id();
-
+          
             if (!empty($_FILES['fileupload']['name'])) {
-                $upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
-                $data1 = [
+				$upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
+				$data1 = [
                     'id_asset' => $id,
-                    'file_path' => $upload['path_min'],
-                    'file_name' => $upload['name'],
-                    'created_at' => date('Y-m-d H:i:s'),
+					'file_path' => $upload['path_min'],
+					'file_name' => $upload['name'],
+                    'created_at' => date('Y-m-d H:i:s'), 
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'deleted_at' => NULL,
-                ];
+                    'deleted_at' => NULL, 
+				];
                 $this->db->insert('3_file_asset', $data1);
-            }
+			}
 
             $raw = array(
                 'id_asset' => $id,
@@ -173,17 +179,17 @@ class Asset extends CI_Controller
             $this->db->update('3_asset', $data);
 
             if (!empty($_FILES['fileupload']['name'])) {
-                $upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
-                $data1 = [
+				$upload = upload_file('fileupload', 'uploads/assetsqr/' . date('Y-m-d'), true, 'png|jpg|jpeg|gif', 5);
+				$data1 = [
                     'id_asset' => $id,
-                    'file_path' => $upload['path_min'],
-                    'file_name' => $upload['name'],
-                    'created_at' => date('Y-m-d H:i:s'),
+					'file_path' => $upload['path_min'],
+					'file_name' => $upload['name'],
+                    'created_at' => date('Y-m-d H:i:s'), 
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'deleted_at' => NULL,
-                ];
+                    'deleted_at' => NULL, 
+				];
                 $this->db->insert('3_file_asset', $data1);
-            }
+			}
 
             $raw = array(
                 'id_asset' => $id,
@@ -205,7 +211,7 @@ class Asset extends CI_Controller
             $this->load->view('qr/template/sidebar_admin');
             $this->load->view('qr/admin/edit');
             $this->load->view('qr/template/footer');
-        }
+        }      
     }
 
     public function delete($id)
@@ -231,9 +237,9 @@ class Asset extends CI_Controller
 
     public function detail($id)
     {
-        $id_asset = decode_id($id);
+        // $id_asset = decode_id($id);
         $data = array(
-            'row' => $this->Asset_model->get_asset($id_asset)
+            'row' => $this->Asset_model->get_asset($id)
         );
         $this->load->view('qr/template/header');
         $this->load->view('qr/template/sidebar_admin', $data);

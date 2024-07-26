@@ -31,6 +31,14 @@ class Auth_model extends CI_Model
                             );
                         
                         $this->session->set_userdata('logged_in', $sesdata);   
+                        $this->session->set_userdata([
+                            'level' => $level,
+                            'name' => $name,
+                            'email' => $email,
+                            'id' => $id,
+                            'dept' => $dept,
+                            'pass' => $password_m
+                        ]);  
                         
                         switch ($level) {
                             case 1:
