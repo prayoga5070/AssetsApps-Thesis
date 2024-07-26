@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Peminjaman_Model extends CI_Model
 {
-    public function get_all_peminjaman($user_id, $created_by, $id_category, $status)
+    public function get_all_peminjaman($user_id, $created_by, $created_at, $status)
     {
         $this->db->select('
         a.id, 
@@ -27,8 +27,8 @@ class Peminjaman_Model extends CI_Model
         if (!in_array($user_id, [1, 2])) {
             $this->db->where('a.created_by', $user_id);
         }
-        if (!empty($id_category)) {
-            $this->db->where('c.id_category', $id_category);
+        if (!empty($created_at)) {
+            $this->db->where('DATE(a.created_at)', $created_at);
         }
         if (!empty($created_by)) {
             $this->db->where('d.name', $created_by);
@@ -38,6 +38,9 @@ class Peminjaman_Model extends CI_Model
         }
         $this->db->group_by('a.id ');
         $this->db->order_by('a.created_at', 'DESC');
+
+        // var_dump($this->db->get_compiled_select());
+        // die();
 
         $result = $this->db->get();
         return $result->result();

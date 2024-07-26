@@ -22,42 +22,39 @@
   <!-- Main content -->
   <section class="content">
     <form action="<?= base_url('asset/peminjaman'); ?>" method="post" class="mb-3">
-      <div class="form-row">
-        <div class="form-group col-md-6 row ml-auto">
-          <label for="created_at" class="col-sm-2 col-form-label">Tanggal</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="created_at" id="datepick1" placeholder="Select date">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group row">
+            <label for="created_at" class="col-sm-2 col-form-label">Tanggal</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control datepick1" name="created_at" placeholder="Select date">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="created_by" class="col-sm-2 col-form-label">User</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="created_by">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="status" class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-10">
+              <select name="status" class="form-control">
+                <option value="">-- Pilih Status --</option>
+                <option value="Draft">Draft</option>
+                <option value="Submit">Submit</option>
+                <option value="Done">Done</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+              <?php echo '<div style="color: red;font-size: 14px">' . form_error('status') . '</div>'; ?>
+            </div>
           </div>
         </div>
-        <div class="form-group col-md-6 row ml-auto">
-          <label for="created_by" class="col-sm-2 col-form-label">Requester</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="created_by">
+        <div class="col-md-6">
+          <div class="form-group col-md-6">
+            <button type="submit" class="btn btn-primary text-right">Search</button>
           </div>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6 row ml-auto">
-          <label for="code" class="col-sm-2 col-form-label">Kode</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="code">
-          </div>
-        </div>
-        <div class="form-group col-md-6 row ml-auto">
-          <label for="status" class="col-sm-2 col-form-label">Status</label>
-          <div class="col-sm-10">
-            <select name="status" class="form-control">
-              <option value="">-- Pilih Status --</option>
-              <option value="Draft">Draft</option>
-              <option value="Submit">Submit</option>
-              <option value="Done">Done</option>
-            </select>
-            <?php echo '<div style="color: red;font-size: 14px">' . form_error('status') . '</div>'; ?>
-          </div>
-        </div>
-      </div>
-      <div class="text-right">
-        <button type="submit" class="btn btn-primary">Search</button>
       </div>
     </form>
 
@@ -89,7 +86,7 @@
               <table id="example3" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>Id</th>
+                    <th class="d-none">Id</th>
                     <th>Tanggal Create</th>
                     <th>Deskripsi</th>
                     <th>User</th>
@@ -103,7 +100,7 @@
                   foreach ($get_all_peminjaman as $item) {
                   ?>
                     <tr>
-                      <td><?php echo $item->id ?></td>
+                      <td class="d-none"><?php echo $item->id ?></td>
                       <td><?php echo $item->created_at ?></td>
                       <td><?php echo $item->description ?></td>
                       <td><?php echo $item->name ?></td>

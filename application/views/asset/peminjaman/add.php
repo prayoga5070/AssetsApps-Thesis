@@ -38,13 +38,13 @@
                                             <label for="date" class="col-sm-3 col-form-label">Tanggal Peminjaman</label>
                                             <div class="row">
                                                 <div class="col-sm-5">
-                                                    <input type="text" id="start_date" name="start_date" class="form-control datepick1" placeholder="Select date" value="2024-07-18">
+                                                    <input type="text" id="start_date" name="start_date" class="form-control datepick1" placeholder="Select date">
                                                 </div>
                                                 <div class="col-sm-2 text-center">
                                                     <p>S/d</p>
                                                 </div>
                                                 <div class="col-sm-5">
-                                                    <input type="text" id="end_date" name="end_date" class="form-control datepick1" placeholder="Select date" value="2024-07-19">
+                                                    <input type="text" id="end_date" name="end_date" class="form-control datepick1" placeholder="Select date">
                                                 </div>
                                             </div>
                                             <div id="date_error" style="color: red; font-size: 14px;"></div>
@@ -53,7 +53,7 @@
                                             <label for="location" class="col-sm-3 col-form-label">Location</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control" name="location" value="1">
+                                                    <input type="text" class="form-control" name="location">
                                                 </div>
                                             </div>
                                         </div>
@@ -61,7 +61,7 @@
                                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <textarea type="text" class="form-control" name="description" rows="6">Pinjem</textarea>
+                                                    <textarea type="text" class="form-control" name="description" rows="6"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,13 +84,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Laptop</td>
-                                                            <td>1</td>
-                                                            <td>Pinjem</td>
-                                                            <td>Draft</td>
-                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>

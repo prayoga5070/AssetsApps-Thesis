@@ -17,19 +17,23 @@ class Peminjaman extends CI_Controller
     {
         $user_id = $this->session->userdata('logged_in')['id'];
 
-        $created_by = $this->input->post('created_by');
-        $id_category = $this->input->post('id_category');
-        $status = $this->input->post('status');
-
         if ($this->input->post()) {
+            $created_by = $this->input->post('created_by');
+            $created_at = $this->input->post('created_at');
+            $status = $this->input->post('status');
 
-            redirect('asset/peminjaman/index?&created_by=' . urlencode($created_by) . '&id_category=' . urlencode($id_category) . '&status=' . urlencode($status));
+            redirect('asset/peminjaman/index?created_at=' . urlencode($created_at) . '&created_by=' . urlencode($created_by) . '&status=' . urlencode($status));
         }
+
+        // Retrieve the query parameters for filtering
+        $created_at = $this->input->get('created_at');
+        $created_by = $this->input->get('created_by');
+        $status = $this->input->get('status');
 
         $filter_result = $this->Peminjaman_model->get_all_peminjaman(
             $user_id,
             $created_by,
-            $id_category,
+            $created_at,
             $status
         );
 

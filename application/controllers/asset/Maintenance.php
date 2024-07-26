@@ -17,15 +17,22 @@ class Maintenance extends CI_Controller
     {
         $user_id = $this->session->userdata('logged_in')['id'];
 
-        $created_at = $this->input->post('created_at');
-        $created_by = $this->input->post('created_by');
-        $code = $this->input->post('code');
-        $status = $this->input->post('status');
-
         if ($this->input->post()) {
+            // Handle form submission
+            $created_at = $this->input->post('created_at');
+            $created_by = $this->input->post('created_by');
+            $code = $this->input->post('code');
+            $status = $this->input->post('status');
 
+            // Redirect with query parameters
             redirect('asset/maintenance/index?created_at=' . urlencode($created_at) . '&created_by=' . urlencode($created_by) . '&code=' . urlencode($code) . '&status=' . urlencode($status));
         }
+
+        // Retrieve the query parameters for filtering
+        $created_at = $this->input->get('created_at');
+        $created_by = $this->input->get('created_by');
+        $code = $this->input->get('code');
+        $status = $this->input->get('status');
 
         $filter_result = $this->Maintenance_model->get_all_filter(
             $user_id,

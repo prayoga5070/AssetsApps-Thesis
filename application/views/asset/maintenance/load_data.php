@@ -26,7 +26,7 @@
         <div class="form-group col-md-6 row ml-auto">
           <label for="created_at" class="col-sm-2 col-form-label">Tanggal</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" name="created_at" id="datepick1" placeholder="Select date">
+            <input type="text" class="form-control datepick1" name="created_at" placeholder="Select date">
           </div>
         </div>
         <div class="form-group col-md-6 row ml-auto">
