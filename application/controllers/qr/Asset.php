@@ -33,7 +33,9 @@ class Asset extends CI_Controller
         // );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset');
         $this->load->view('qr/template/footer');
     }
@@ -41,7 +43,9 @@ class Asset extends CI_Controller
     public function add()
     {
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/add');
         $this->load->view('qr/template/footer');
     }
@@ -53,7 +57,9 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->get_asset($id_asset)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/edit', $data);
         $this->load->view('qr/template/footer');
     }
@@ -141,7 +147,9 @@ class Asset extends CI_Controller
             return redirect(base_url('qr/asset/setup'));
         } else {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+            $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+            $this->load->view('qr/template/sidebar_admin', $dataMenu);
             $this->load->view('qr/admin/add');
             $this->load->view('qr/template/footer');
         }
@@ -314,7 +322,9 @@ class Asset extends CI_Controller
             return redirect(base_url('qr/asset/setup'));
         } else {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+            $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+            $this->load->view('qr/template/sidebar_admin', $dataMenu);
             $this->load->view('qr/admin/edit');
             $this->load->view('qr/template/footer');
         }
@@ -348,7 +358,9 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->get_asset($id_asset)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/detail', $data);
         $this->load->view('qr/template/footer');
     }
@@ -357,7 +369,9 @@ class Asset extends CI_Controller
     public function scan()
     {
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/scan');
         $this->load->view('qr/template/footer');
     }
@@ -368,7 +382,9 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->asset_qr($id)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/view', $data);
         $this->load->view('qr/template/footer');
     }
@@ -398,56 +414,65 @@ class Asset extends CI_Controller
     {
         $assetModel = new Asset_model();
         $originfile = null;
-        if ($_FILES) {
-            $originfile = $_FILES['fileFoto'];
-        }
-        $path = 'uploads/assetsqr/';
+        $data = [];
         $countFile = 0;
-
         $notFounded = "";
-        if (isset($originfile) && $originfile['name'][0] !== '') {
-            if (is_array($originfile)) {
-                for ($i = 0; $i < sizeOf($originfile['name']); $i++) {
-                    $originFileName = str_replace(" ", "_", $originfile['name'][$i]);
-                    $filenameList = (explode(".", $originfile['name'][$i]));
-                    $filesize = $originfile['size'][$i];
-                    $tempFile = $originfile['tmp_name'][$i] . '/' . $originfile['name'][$i];
+        try {
+            if ($_FILES) {
 
-                    $dataDetail = $assetModel->asset_code($filenameList[0]);
-                    if (isset($dataDetail)) {
-                        $year = date("Y");
-                        $month = date("m");
-                        $date = date("d");
-                        $hour = date("H");
-                        $minutes = date("i");
-                        $second = date("s");
-                        $newName = $date . "" . $month . "" . $year . "" . $hour . "" . $minutes . "" . $second . "_" . $originFileName;
-                        $dirFile = $path . $year . "-" . $month . "-" . $date  . "/";
-                        if (!file_exists($dirFile)) {
-                            mkdir($dirFile, 0777, true);
+                $originfile = $_FILES['fileFoto'];
+
+                $path = 'uploads/assetsqr/';
+
+                if (isset($originfile) && $originfile['name'][0] !== '') {
+                    if (is_array($originfile)) {
+                        for ($i = 0; $i < sizeOf($originfile['name']); $i++) {
+                            $originFileName = str_replace(" ", "_", $originfile['name'][$i]);
+                            $filenameList = (explode(".", $originfile['name'][$i]));
+                            $filesize = $originfile['size'][$i];
+                            $tempFile = $originfile['tmp_name'][$i] . '/' . $originfile['name'][$i];
+
+                            $dataDetail = $assetModel->asset_code($filenameList[0]);
+                            if (isset($dataDetail)) {
+                                $year = date("Y");
+                                $month = date("m");
+                                $date = date("d");
+                                $hour = date("H");
+                                $minutes = date("i");
+                                $second = date("s");
+                                $newName = $date . "" . $month . "" . $year . "" . $hour . "" . $minutes . "" . $second . "_" . $originFileName;
+                                $dirFile = $path . $year . "-" . $month . "-" . $date  . "/";
+                                if (!file_exists($dirFile)) {
+                                    mkdir($dirFile, 0777, true);
+                                }
+                                move_uploaded_file($originfile['tmp_name'][$i], $dirFile . $newName);
+                                // $filepathSave=
+                                $data1 = [
+                                    'id_asset' => $dataDetail->id,
+                                    'file_path' => trim($dirFile, "/"),
+                                    'file_name' => $newName,
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                    'deleted_at' => NULL,
+                                ];
+                                $this->db->insert('3_file_asset', $data1);
+                                $countFile++;
+                            } else {
+                                $notFounded .= "File Foto dengan Kode Asset " . $filenameList[0] . " Tidak Ditemukan";
+                                $notFounded .= '<br/>';
+                            }
                         }
-                        move_uploaded_file($originfile['tmp_name'][$i], $dirFile . $newName);
-                        // $filepathSave=
-                        $data1 = [
-                            'id_asset' => $dataDetail->id,
-                            'file_path' => trim($dirFile, "/"),
-                            'file_name' => $newName,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'deleted_at' => NULL,
-                        ];
-                        $this->db->insert('3_file_asset', $data1);
-                        $countFile++;
-                    } else {
-                        $notFounded .= "File Foto dengan Kode Asset " . $filenameList[0] . " Tidak Ditemukan";
-                        $notFounded .= '<br/>';
                     }
                 }
             }
+        } catch (\Exception $th) {
+            $notFounded .= "Upload Failed :" . $th;
+            $notFounded .= '<br/>';
+            var_dump($notFounded);
+            exit;
         }
-
         //result untuk notif
-        $data = [];
+
         $data['notif'] = 'Upload ' . $countFile . ' File Success';
         if (isset($notFounded)) {
             $data['notif'] .= '<br/>';
@@ -455,7 +480,9 @@ class Asset extends CI_Controller
             $data['notif'] .= $notFounded;
         }
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
@@ -503,9 +530,9 @@ class Asset extends CI_Controller
                                 }
                                 if ((!isset($dataloop[0])
                                     || $dataloop[0] == '')) {
-                                        $notFounded .= "Kode Asset In Row " . ($counter - 1) . " Tidak Terisi";
-                                        $notFounded .= "<br/>";
-                                        continue;
+                                    $notFounded .= "Kode Asset In Row " . ($counter - 1) . " Tidak Terisi";
+                                    $notFounded .= "<br/>";
+                                    continue;
                                 }
                                 $dataDetail = $assetModel->asset_code($dataloop[0]);
                                 if (isset($dataDetail)) {
@@ -565,14 +592,16 @@ class Asset extends CI_Controller
             $data['notif'] .= $notFounded;
         }
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
     public function exportToExcel()
     {
         $assetModel = new Asset_model();
-        $_REQUEST['length']=-1;
+        $_REQUEST['length'] = -1;
         $data = $assetModel->GetData($_REQUEST);
 
         $spreadsheet = new Spreadsheet();
@@ -598,10 +627,9 @@ class Asset extends CI_Controller
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
-        
+
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
     }
-
 }

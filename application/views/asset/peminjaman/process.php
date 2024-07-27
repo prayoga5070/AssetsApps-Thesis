@@ -9,7 +9,7 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= base_url(); ?>qr/dashboard">Home</a></li>
                         <li class="breadcrumb-item active">Peminjaman</li>
-                        <li class="breadcrumb-item active">Edit</li>
+                        <li class="breadcrumb-item active">Process</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -24,12 +24,12 @@
             <section class="col-lg-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Edit Pengajuan Peminjaman</h3>
+                        <h3 class="card-title">Process Pengajuan Peminjaman</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="col-lg-12">
-                        <form id="formAddPengajuanPeminjaman">
+                        <form id="formProcessPengajuanPeminjaman">
                             <!-- .card-body -->
                             <div class="card-body">
                                 <div class="row">
@@ -38,13 +38,13 @@
                                             <label for="date" class="col-sm-3 col-form-label">Tanggal Peminjaman</label>
                                             <div class="row">
                                                 <div class="col-sm-5">
-                                                    <input type="text" id="start_date" name="start_date" class="form-control datepick1" placeholder="Select date" value="<?php echo $row->start_date ?>">
+                                                    <input type="text" id="start_date" name="start_date" class="form-control datepick1" placeholder="Select date" value="<?php echo $row->start_date ?>" readonly>
                                                 </div>
                                                 <div class="col-sm-2 text-center">
                                                     <p>S/d</p>
                                                 </div>
                                                 <div class="col-sm-5">
-                                                    <input type="text" id="end_date" name="end_date" class="form-control datepick1" placeholder="Select date" value="<?php echo $row->end_date ?>">
+                                                    <input type="text" id="end_date" name="end_date" class="form-control datepick1" placeholder="Select date" value="<?php echo $row->end_date ?>" readonly>
                                                 </div>
                                             </div>
                                             <div id="date_error" style="color: red; font-size: 14px;"></div>
@@ -53,7 +53,7 @@
                                             <label for="location" class="col-sm-3 col-form-label">Location</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control" name="location" value="<?php echo $row->location ?>">
+                                                    <input type="text" class="form-control" name="location" value="<?php echo $row->location ?>" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -61,14 +61,19 @@
                                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <textarea type="text" class="form-control" name="description" rows="6"><?php echo $row->description ?></textarea>
+                                                    <textarea type="text" class="form-control" name="description" rows="6" readonly><?php echo $row->description ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="approver_note" class="col-sm-3 col-form-label">Approver Note</label>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <textarea type="text" class="form-control" name="approver_note" rows="6"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <hr>
-                                        <div class="mr-2">
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalPinjamAsset">Tambah Asset</button>
-                                        </div>
                                         <div class="form-group row mt-1 col-9">
                                             <div class="table-responsive">
                                                 <table id="gridPinjamAsset" class="table table-bordered table-striped">
@@ -94,11 +99,8 @@
                                                                 <td><?php echo $item->description ?></td>
                                                                 <td>
                                                                     <div class="btn-group btn-group-sm">
-                                                                        <button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">
-                                                                            <i class="fa fa-pen"></i> Edit
-                                                                        </button>
-                                                                        <button type="button" id="btnDeletePinjamAsset" class="btn btn-danger btn-sm mr-3">
-                                                                            <i class="fa fa-trash"></i> Delete
+                                                                        <button type="button" id="btnAddAssetPeminjaman" class="btn btn-success btn-sm mr-3">
+                                                                            <i class="fa fa-pen"></i> Add Item
                                                                         </button>
                                                                     </div>
                                                                 </td>
@@ -119,10 +121,10 @@
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="mr-2">
-                                        <button id="btnSubmit" type="button" class="btn btn-info">Save</button></a>
+                                        <button id="btnSubmit" type="button" class="btn btn-success">Save</button></a>
                                     </div>
                                     <div class="mr-2">
-                                        <button id="btnDraft" type="button" class="btn btn-info">Draft</button></a>
+                                        <button id="btnReject" type="button" class="btn btn-danger">Reject</button></a>
                                     </div>
                                     <div>
                                         <a href="<?php echo base_url(); ?>asset/peminjaman"><button type="button" class="btn btn-info">Cancel</button></a>
@@ -143,11 +145,10 @@
 </div>
 
 <!-- Asset Modal -->
-<div class="modal fade" id="modalPinjamAsset" tabindex="-1" role="dialog" aria-labelledby="assetModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="modalAddAssetPeminjaman" tabindex="-1" role="dialog" aria-labelledby="assetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg-custom" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div>Tambah Aset Dipinjam</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -168,35 +169,71 @@
                                 <!-- <div class="card-header">
                                 </div> -->
                                 <div class="card-body">
-                                    <form id="form_modal">
+                                    <h3>Daftar Asset</h3>
+                                    <form id="form_add_asset_modal">
+                                        <input type="number" class="form-control" name="id_edit_modal" id="id_add_asset_modal" hidden>
                                         <div class="form-group">
-                                            <label for="category_modal" class="col-form-label">Kategori Asset</label>
-                                            <div>
-                                                <select id="category_modal" name="category_modal" class="form-control">
-                                                    <option value="">-- Pilih Kategori --</option>
-                                                    <?php
-                                                    foreach ($assetCategories as $item2) {
-                                                    ?>
-                                                        <option value=<?php echo $item2->id ?>><?php echo $item2->name ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                            <div class="table-responsive">
+                                                <table id="gridAddAssetPinjam" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Code</th>
+                                                            <th>Name</th>
+                                                            <th>Category</th>
+                                                            <th>Location</th>
+                                                            <th>Description</th>
+                                                            <th>Photo</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        foreach ($assetDropdown as $item3) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?php echo $item3->id ?></td>
+                                                                <td><?php echo $item3->code ?></td>
+                                                                <td><?php echo $item3->name ?></td>
+                                                                <td><?php echo $item3->category_name ?></td>
+                                                                <td><?php echo $item3->location ?></td>
+                                                                <td><?php echo $item3->description ?></td>
+                                                                <td>
+                                                                    <img src="<?php echo base_url($item3->file_path . "/" . $item3->file_name); ?>" style="display: block;margin-left: auto;margin-right: auto;" width="35%" height="35%">
+                                                                </td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-sm">
+                                                                        <button type="button" id="btnPilihAssetPinjam" class="btn btn-info btn-sm mr-3">
+                                                                            <i class="fa fa-edit"></i> Pilih
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty_modal" class="col-form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty_modal" id="qty_modal" value="<?php echo set_value('code'); ?>" min="1">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="note_modal" class="col-sm-3 col-form-label">Description</label>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <textarea type="text" class="form-control" id="note_modal" name="note_modal" rows="6"></textarea>
-                                                    <!-- <input type="text" class="form-control" name="note_modal" id="note_modal"> -->
-                                                </div>
+                                            <br>
+                                            <hr>
+                                            <h3>Asset Dipilih</h3>
+                                            <div class="table-responsive">
+                                                <table id="gridAssetDipilih" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Code</th>
+                                                            <th>Name</th>
+                                                            <th>Category</th>
+                                                            <th>Location</th>
+                                                            <th>Description</th>
+                                                            <th>Photo</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <button id="btnAddCategoryPeminjaman" type="button" class="btn btn-info">Add</button></a>
                                         </div>
                                     </form>
                                 </div><!-- /.card-body -->
@@ -211,89 +248,24 @@
         </div>
     </div>
 </div>
-
-<!-- Asset Modal -->
-<div class="modal fade" id="modalEditPinjamAsset" tabindex="-1" role="dialog" aria-labelledby="assetModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>Edit Aset Dipinjam</div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Form inside the modal -->
-                <!-- Main content -->
-                <section class="content">
-                    <div class="col-lg-3 col-12">
-                    </div>
-                    <!-- /.row -->
-                    <!-- Main row -->
-                    <div class="row">
-                        <!-- Left col -->
-                        <section class="col-lg-12">
-                            <!-- Custom tabs (Charts with tabs)-->
-                            <div class="card">
-                                <!-- <div class="card-header">
-                                </div> -->
-                                <div class="card-body">
-                                    <form id="form_edit_modal">
-                                        <input type="number" class="form-control" name="id_edit_modal" id="id_edit_modal" hidden>
-                                        <div class="form-group">
-                                            <label for="category_edit_modal" class="col-form-label">Kategori Asset</label>
-                                            <div>
-                                                <select id="category_edit_modal" name="category_modal" class="form-control">
-                                                    <option value="">-- Pilih Kategori --</option>
-                                                    <?php
-                                                    foreach ($assetCategories as $item3) {
-                                                    ?>
-                                                        <option value=<?php echo $item3->id ?>><?php echo $item3->name ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty_edit_modal" class="col-form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty_edit_modal" id="qty_edit_modal" value="<?php echo set_value('code'); ?>" min="1">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="note_edit_modal" class="col-sm-3 col-form-label">Description</label>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <textarea type="text" class="form-control" id="note_edit_modal" name="note_edit_modal" rows="6"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button id="btnEditCategoryPeminjaman" type="button" class="btn btn-info">Save</button></a>
-                                        </div>
-                                    </form>
-                                </div><!-- /.card-body -->
-                                <!-- /.card -->
-                        </section>
-                        <!-- /.Left col -->
-                    </div>
-                    <!-- /.row (main row) -->
-            </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
-    </div>
-</div>
-
 
 <style>
     .error {
         color: red;
         font-size: 12px;
     }
+
+    .modal-lg-custom {
+        max-width: 80%;
+    }
 </style>
 
 <script>
     $(document).ready(function() {
         var row;
+        var row2;
         var rowData;
+        var rowData2;
 
         var table = $("#gridPinjamAsset").DataTable({
             "responsive": true,
@@ -314,6 +286,90 @@
             //         "searchable": false
             //     }
             // ]
+        });
+
+        var table2 = $("#gridAddAssetPinjam").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "lengthMenu": [
+                [5]
+            ],
+            // "dom": '<"top"l>rt<"bottom"ip><"">',
+            "columnDefs": [{
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 2,
+                },
+                {
+                    "targets": 3,
+                },
+                {
+                    "targets": 4,
+                    "searchable": false
+                },
+                {
+                    "targets": 5,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 6,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 7,
+                    "searchable": false,
+                    "orderable": false
+                }
+            ]
+        });
+
+        var table3 = $("#gridAssetDipilih").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "lengthMenu": [
+                [5]
+            ],
+            // "dom": '<"top"l>rt<"bottom"ip><"">',
+            "columnDefs": [{
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 2,
+                },
+                {
+                    "targets": 3,
+                },
+                {
+                    "targets": 4,
+                    "searchable": false
+                },
+                {
+                    "targets": 5,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 6,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 7,
+                    "searchable": false,
+                    "orderable": false
+                }
+            ]
         });
 
         // Custom validation rule for integers greater than 0
@@ -401,35 +457,15 @@
             }
         });
 
-        $("#formAddPengajuanPeminjaman").validate({
+        $("#formProcessPengajuanPeminjaman").validate({
             rules: {
-                start_date: {
-                    required: true,
-                },
-                end_date: {
-                    required: true,
-                    dateGreaterThan: "#start_date"
-                },
-                location: {
-                    required: true,
-                },
-                description: {
+                approver_note: {
                     required: true,
                 }
             },
             messages: {
-                start_date: {
-                    required: "Tanggal Peminjaman field wajib diisi.",
-                },
-                end_date: {
-                    required: "Tanggal Peminjaman field wajib diisi.",
-                    dateGreaterThan: "Tanggal akhir harus setelah tanggal mulai."
-                },
-                location: {
-                    required: "Location field wajib diisi.",
-                },
-                description: {
-                    required: "Description field wajib diisi.",
+                approver_note: {
+                    required: "Approver Note field wajib diisi.",
                 }
             },
             errorPlacement: function(error, element) {
@@ -443,12 +479,7 @@
             }
         });
 
-        $('#gridPinjamAsset tbody').on('click', '#btnDeletePinjamAsset', function() {
-            row = $(this).closest('tr');
-            table.row(row).remove().draw();
-        });
-
-        $('#gridPinjamAsset tbody').on('click', '#btnEditPinjamAsset', function() {
+        $('#gridPinjamAsset tbody').on('click', '#btnAddAssetPeminjaman', function() {
             row = $(this).closest('tr');
             rowData = table.row(row).data();
 
@@ -457,38 +488,34 @@
             $('#qty_edit_modal').val(rowData[3]);
             $('#note_edit_modal').val(rowData[4]);
 
-            $('#modalEditPinjamAsset').modal('show');
+            $('#modalAddAssetPeminjaman').modal('show');
         });
 
         $('#btnSubmit').click(function(event) {
-            let status = "On Progress";
-            var formData = $('#formAddPengajuanPeminjaman').serializeArray();
-            dataToSendPostAdd('Submit', formData);
+            event.preventDefault();
+            var formData = $('#formProcessPengajuanPeminjaman').serializeArray();
+            dataToSendPostAdd('Done', formData);
         });
 
-        $('#btnDraft').click(function(event) {
+        $('#btnReject').click(function(event) {
             event.preventDefault();
-            var formData = $('#formAddPengajuanPeminjaman').serializeArray();
-            dataToSendPostAdd('Draft', formData);
+            var formData = $('#formProcessPengajuanPeminjaman').serializeArray();
+            dataToSendPostAdd('Rejected', formData);
         });
 
         function dataToSendPostAdd(status, formData) {
-            var checkForm = $("#formAddPengajuanPeminjaman").valid();
-            var checkGrid = validateGrid();
-            if (checkGrid && checkForm) {
+            var checkForm = $("#formProcessPengajuanPeminjaman").valid();
+            if (checkForm) {
                 formData.push({
                     name: 'status',
                     value: status
                 });
 
                 var tableData = [];
-                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                table3.rows().every(function(rowIdx, tableLoop, rowLoop) {
                     var data = this.data();
                     tableData.push({
-                        id: data[0],
-                        asset_category_id: data[1],
-                        quantity: data[3],
-                        description: data[4]
+                        id: data[0]
                     });
                 });
                 var combinedData = {
@@ -498,83 +525,67 @@
                 var jsonData = JSON.stringify(combinedData);
 
                 $.ajax({
-                    url: '<?php echo base_url('asset/peminjaman/post_edit/'); ?><?php echo $row->id ?>',
+                    url: '<?php echo base_url('asset/peminjaman/post_process/'); ?><?php echo $row->id ?>',
                     type: 'POST',
                     data: jsonData,
                     contentType: 'application/json',
-                    beforeSend: function(data) {
-                        // alert(jsonData);
-                    },
                     success: function(resp) {
-                        // console.dir(resp);
-                        window.location.href = resp.url;
+                        try {
+                            if (resp.status === 'success') {
+                                window.location.href = resp.url;
+                            } else {
+                                alert(resp);
+                            }
+                        } catch (error) {
+                            console.dir(resp);
+                            alert('Error parsing server response: ' + error.message);
+                        }
                     },
                     error: function(xhr, status, error) {
-                        alert.error('Error submitting form', error);
+                        console.dir(xhr.responseText);
+                        alert('Server error: ' + xhr.responseText);
                     }
                 });
             }
         }
 
-        // Validate grid
-        function validateGrid() {
-            if (table.rows().count() < 1) {
-                $("#gridPinjamAsset_error").text("Harap pilih minimal 1 asset.");
-                return false;
-            } else {
-                $("#gridPinjamAsset_error").text("");
-                return true;
-            }
-            return true;
-        }
-
         // form modal popup
-        $('#btnAddCategoryPeminjaman').click(function() {
-            if ($("#form_modal").valid()) {
-                var categoryId = $('#category_modal option:selected').val();
-                var category = $('#category_modal option:selected').text();
-                var qty = $('#qty_modal').val();
-                var note = $('#note_modal').val();
+        $('#gridAddAssetPinjam tbody').on('click', '#btnPilihAssetPinjam', function(e) {
+            row2 = $(this).closest('tr');
+            rowData2 = table2.row(row2).data();
 
-                table.row.add([
-                    0,
-                    categoryId,
-                    category,
-                    qty,
-                    note,
-                    '<div class="btn-group btn-group-sm">' +
-                    '<button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">' +
-                    '<i class="fa fa-pen"></i> Edit' +
-                    '</button>' +
-                    '<button type="button" id="btnDeletePinjamAsset" class="btn btn-danger btn-sm mr-3">' +
-                    '<i class="fa fa-trash"></i> Delete' +
-                    '</button>' +
-                    '</div>'
-                ]).draw(false);
+            table3.row.add([
+                rowData2[0], // Id
+                rowData2[1], // Code
+                rowData2[2], // Name
+                rowData2[3], // Category
+                rowData2[4], // Location
+                rowData2[5], // Description
+                rowData2[6],
+                '<div class="btn-group btn-group-sm"><button type="button" class="btn btn-danger btn-sm mr-3" onclick="removeRow(this)"><i class="fa fa-trash"></i> Remove</button></div>'
+            ]).draw(false);
 
-                $('#modalPinjamAsset').modal('hide');
-            }
+            // Disable the button after clicking
+            $(this).prop('disabled', true);
         });
 
-        $('#btnEditCategoryPeminjaman').click(function() {
-            if ($("#form_edit_modal").valid()) {
-                var id = $('#id_edit_modal').val();
-                var categoryId = $('#category_edit_modal option:selected').val();
-                var category = $('#category_edit_modal option:selected').text();
-                var qty = $('#qty_edit_modal').val();
-                var note = $('#note_edit_modal').val();
+        // Function to remove a row from gridAssetDipilih
+        window.removeRow = function(button) {
+            var row3 = $(button).closest('tr');
+            var rowData3 = table3.row(row3).data();
+            var assetId = rowData3[0];
 
-                table.row(row).data([
-                    id,
-                    categoryId,
-                    category,
-                    qty,
-                    note,
-                    rowData[5]
-                ]).draw(false);
+            // Remove the asset from gridAssetDipilih
+            table3.row(row3).remove().draw(false);
 
-                $('#modalEditPinjamAsset').modal('hide');
-            }
-        });
+            // Re-enable the button in gridAddAssetPinjam if it exists
+            $('#gridAddAssetPinjam tbody tr').each(function() {
+                row2 = $(this);
+                rowData2 = table2.row(row2).data();
+                if (rowData2 && rowData2[0] === assetId) {
+                    row2.find('#btnPilihAssetPinjam').prop('disabled', false);
+                }
+            });
+        };
     });
 </script>

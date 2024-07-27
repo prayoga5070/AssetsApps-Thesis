@@ -18,7 +18,9 @@ class Report extends CI_Controller {
             'assets' => $this->Asset_model->get_all_asset(),
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+ $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/report', $data);
         $this->load->view('qr/template/footer');
     }
@@ -29,7 +31,9 @@ class Report extends CI_Controller {
             'assets' => $this->Asset_model->get_all_asset(),
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+ $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/log',$data);
         $this->load->view('qr/template/footer');
     }

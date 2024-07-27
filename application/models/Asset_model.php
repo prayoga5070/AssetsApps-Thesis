@@ -72,7 +72,7 @@ class Asset_model extends CI_Model
     }
 
     // Filtering
-    $sWhere = "";
+    $sWhere = "where deleted_at is null ";
     if (
       (isset($request['kodeAsset'])&&$request['kodeAsset']!='') || 
       (isset($request['nameAsset'])&&$request['nameAsset']!='')||
@@ -81,32 +81,25 @@ class Asset_model extends CI_Model
       (isset($request['locationAsset'])&&$request['locationAsset']!=''))
       
     {
-      $sWhere .= ' where ';
+
       if(  (isset($request['kodeAsset'])&&$request['kodeAsset']!='')){
+        $sWhere.=' and ';
         $sWhere.='code like \'%'.$request['kodeAsset'].'%\'';
       }
       if(  (isset($request['nameAsset'])&&$request['nameAsset']!='')){
-        if(  ( $sWhere != ' where ')){
           $sWhere.=' and ';
-        }
         $sWhere.='name like \'%'.$request['nameAsset'].'%\'';
       }
       if(  (isset($request['statusAsset'])&&$request['statusAsset']!='')){
-        if(  ( $sWhere != ' where ')){
           $sWhere.=' and ';
-        }
         $sWhere.='status like \'%'.$request['statusAsset'].'%\'';
       }
       if(  (isset($request['userAsset'])&&$request['userAsset']!='')){
-        if(  ( $sWhere != ' where ')){
           $sWhere.=' and ';
-        }
         $sWhere.='user like \'%'.$request['userAsset'].'%\'';
       }
       if(  (isset($request['locationAsset'])&&$request['locationAsset']!='')){
-        if(  ( $sWhere != ' where ')){
           $sWhere.=' and ';
-        }
         $sWhere.='location like \'%'.$request['locationAsset'].'%\'';
       }
     }
@@ -133,6 +126,13 @@ class Asset_model extends CI_Model
       "data" => $rResult
     );
     return $output;
+  }
+  public function get_all_asset_category()
+  {
+    $result = $this->db->select('a.id, a.name, a.id_department')->where(['a.deleted_at' => NULL])->get('3_category_asset as a');
+
+    $data = $result->result();
+    return $data;
   }
 }
 

@@ -15,23 +15,13 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
-        $data = array(
-            'get_all_asset' => $this->Asset_model->get_all_asset()
-        );
+      
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/dashboard', $data);
-        $this->load->view('qr/template/footer');
-    }
-
-    public function maintenance()
-    {
-        $data = array(
-            'get_all_asset' => $this->Asset_model->get_all_asset()
-        );
-        $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/dashboard', $data);
+   
+        $this->load->view('qr/admin/dashboard');
         $this->load->view('qr/template/footer');
     }
 }

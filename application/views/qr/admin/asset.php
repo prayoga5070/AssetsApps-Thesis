@@ -20,107 +20,110 @@
     <!-- /.content-header -->
     <!-- Main content -->
     <section class="content">
-        <?php if ($this->session->userdata('logged_in')['dept'] == 6) { ?>
-            <div class="col-lg-3 col-12">
-                <!-- small box -->
-                <a href="<?= base_url(); ?>qr/asset/add" class="small-box-footer">
-                    <div class="small-box bg-primary">
-                        <div class="inner">
-                            <h3>Add Asset</h3>
-                        </div>
-                </a>
-            </div>
-</div>
-<?php } ?>
-<!-- Main row -->
-<div class="row">
-    <!-- Left col -->
-    <section class="col-lg-12">
-        <div class="col-lg-12">
-            <form id="filter">
-                <div class="row">
-                    <div class=" col-md-6">
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Kode Asset</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="kodeAsset" class="form-control ">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Name</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="nameAsset" class="form-control ">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class=" col-md-6">
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">Status</label>
-                                <div class="col-sm-9">
 
-                                    <select id="status-data" name="statusAsset" class="form-control select2">
-                                        <option value="">-- ALL STATUS --</option>
-
-                                    </select>
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-12">
+                <div class="col-lg-12">
+                    <form id="filter">
+                        <div class="row">
+                            <div class=" col-md-6">
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Kode Asset</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="kodeAsset" class="form-control ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="nameAsset" class="form-control ">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="input-group">
-                                <label class="col-md-3">User</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="userAsset" class="form-control ">
-                                </div>
+                            <div class=" col-md-6">
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Status</label>
+                                        <div class="col-sm-9">
 
+                                            <select id="status-data" name="statusAsset" class="form-control select2">
+                                                <option value="">-- ALL STATUS --</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">User</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="userAsset" class="form-control ">
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-                    </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-12 mt-3">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
+                    <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
+
+
 
                 </div>
-            </form>
-        </div>
-        <div class="col-lg-12 mt-3">
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadData">Upload Data</button>
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadFoto">Upload Foto</button>
-        </div>
-        <div class="col-lg-12 mt-3">
-            <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-            <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-
-        
-
+                <div><br /></div>
+                <?php if ($this->session->userdata('logged_in')['dept'] == 6) { ?>
+                    <div class="col-lg-3 col-12">
+                        <!-- small box -->
+                        <a href="<?= base_url(); ?>qr/asset/add" class="small-box-footer">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <h3>Add Asset</h3>
+                                </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-12 mt-3">
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadData">Upload Data</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#uploadFoto">Upload Foto</button>
+                    </div>
         </div>
         <div><br /></div>
-        <!-- Custom tabs (Charts with tabs)-->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
-                    Data Assets
-                </h3>
-                <div class="card-body">
-                    <table id="asset1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Kode Asset</th>
-                                <th>Nama Asset</th>
-                                <th>Status</th>
-                                <th>User</th>
-                                <th>QRCode</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
+    <?php } ?>
+    <!-- Custom tabs (Charts with tabs)-->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i>
+                Data Assets
+            </h3>
+            <div class="card-body">
+                <table id="asset1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Kode Asset</th>
+                            <th>Nama Asset</th>
+                            <th>Status</th>
+                            <th>User</th>
+                            <th>QRCode</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                    </table>
-                </div><!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+                </table>
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.card -->
     </section>
     <!-- /.Left col -->
 </div>
@@ -202,7 +205,7 @@
                 <h4 class="modal-title" style="color:white"><strong>Notif Upload</strong></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <div class="modal-body" >
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12" id="notifPopup">
                         <?= isset($notif) ? $notif : '' ?>

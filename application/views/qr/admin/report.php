@@ -88,9 +88,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-12 mt-3">
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="exportToExcel()">Export to Excel</button>
-                </div>
+
                 <div class="col-lg-12 mt-3">
                     <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
                     <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
@@ -105,6 +103,9 @@
                             Data Assets
                         </h3>
                         <div class="card-body">
+                            <div class="col-lg-12 mt-3">
+                                <button type="button" class="btn btn-sm btn-secondary" onclick="exportToExcel()">Export to Excel</button>
+                            </div>
                             <table id="report" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>

@@ -49,7 +49,33 @@
        autoclose: true,
        todayHighlight: true,
      });
+     
    });
+
+   function ShowParameter(Collapse, ShowParameter, HideParameter) {
+     //var paramSearch = document.getElementById(FullParameter);
+     var showParameter = document.getElementById(ShowParameter);
+     var hideParameter = document.getElementById(HideParameter);
+     var divCollapse = document.getElementById(Collapse);
+
+     divCollapse.style.display = 'block';
+     //$("#" + Collapse).collapse('show');
+     //paramSearch.style.display = 'block';
+     showParameter.style.display = 'none';
+     hideParameter.style.display = 'block';
+   }
+   //--***************************************END SHOW PARAMETER SEARCH ******************************************//
+
+   //--***************************************START HIDE PARAMETER SEARCH ******************************************//
+
+   function HideParameter(Collapse, ShowParameter, HideParameter) {
+     var showParameter = document.getElementById(ShowParameter);
+     var hideParameter = document.getElementById(HideParameter);
+     var divCollapse = document.getElementById(Collapse);
+     divCollapse.style.display = 'none';
+     hideParameter.style.display = 'none';
+     showParameter.style.display = 'block';
+   }
  </script>
  </body>
 

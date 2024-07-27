@@ -20,7 +20,7 @@ if ($this->session->userdata('logged_in') != true) {
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/qrcode/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
@@ -37,12 +37,16 @@ if ($this->session->userdata('logged_in') != true) {
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-select/css/select.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/select2/css/select2.min.css">
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
   <!-- jQuery -->
   <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery/jquery.min.js"></script>
   <!-- jQuery UI 1.11.4 -->
   <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery-ui/jquery-ui.min.js"></script>
+  <!-- jQuery Validate -->
+  <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery-validation/jquery.validate.min.js"></script>
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -52,7 +56,7 @@ if ($this->session->userdata('logged_in') != true) {
   <!-- ChartJS -->
   <script src="<?= base_url(); ?>assets/qrcode/plugins/chart.js/Chart.min.js"></script>
   <!-- Sparkline -->
-  <script src="<?= base_url(); ?>assets/plugins/sparklines/sparkline.js"></script>
+  <script src="<?= base_url(); ?>assets/qrcode/plugins/sparklines/sparkline.js"></script>
   <!-- JQVMap -->
   <script src="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/jquery.vmap.min.js"></script>
   <script src="<?= base_url(); ?>assets/qrcode/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
@@ -84,6 +88,8 @@ if ($this->session->userdata('logged_in') != true) {
   <script src="<?= base_url(); ?>assets/qrcode/plugins/pdfmake/pdfmake.min.js"></script>
   <script src="<?= base_url(); ?>assets/qrcode/plugins/pdfmake/vfs_fonts.js"></script>
   <script src="<?= base_url(); ?>assets/qrcode/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="<?= base_url(); ?>assets/qrcode/plugins/datatables-select/js/dataTables.select.min.js"></script>
+  <script src="<?= base_url(); ?>assets/qrcode/plugins/select2/js/select2.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
