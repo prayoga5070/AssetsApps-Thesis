@@ -50,6 +50,9 @@ class Auth_model extends CI_Model
                         case 3:
                             redirect(base_url('portal'), 'refresh');
                             break;
+                        case 4:
+                            redirect(base_url('portal'), 'refresh');
+                            break;
 
 
                         default:
