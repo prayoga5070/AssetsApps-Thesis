@@ -112,7 +112,7 @@
                           <a href="<?php echo base_url(); ?>asset/maintenance/view/<?php echo encode_id($row->id); ?>" class="btn btn-info btn-sm mr-3">
                             <i class="fa fa-eye"></i> View
                           </a>
-                          <?php if ($user_id == 2) : ?>
+                          <?php if ($user_level == 2) : ?>
                             <a href="<?php echo base_url(); ?>asset/maintenance/edit/<?php echo encode_id($row->id); ?>" class="btn btn-info btn-sm <?php echo ($row->status == 'Done') ? 'disabled' : ''; ?>">
                               <i class="fa fa-edit"></i> Process
                             </a>

@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Maintenance extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -11,11 +10,14 @@ class Maintenance extends CI_Controller
         if ($this->session->userdata('logged_in') != true) {
             redirect(base_url('auth'));
         }
+        $this->dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $this->dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
     }
 
     public function index()
     {
         $user_id = $this->session->userdata('logged_in')['id'];
+        $user_level = $this->session->userdata('logged_in')['level'];
 
         if ($this->input->post()) {
             // Handle form submission
@@ -39,16 +41,18 @@ class Maintenance extends CI_Controller
             $created_at,
             $created_by,
             $code,
-            $status
+            $status,
+            $user_level
         );
 
         $data = array(
             'get_all_peminjaman' => $filter_result,
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'user_level' => $user_level
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/maintenance/load_data', $data);
         $this->load->view('qr/template/footer');
     }
@@ -70,7 +74,7 @@ class Maintenance extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/maintenance/view', $data);
         $this->load->view('qr/template/footer');
     }
@@ -83,7 +87,7 @@ class Maintenance extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/maintenance/add', $data);
         $this->load->view('qr/template/footer');
     }
@@ -104,7 +108,7 @@ class Maintenance extends CI_Controller
         // Check if form validation passed
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
             $this->load->view('asset/maintenance/add', $data);
             $this->load->view('qr/template/footer');
         } else {
@@ -116,7 +120,7 @@ class Maintenance extends CI_Controller
                 if ($asset->status != 'Active') {
                     $this->session->set_flashdata('msg', '<div class="alert alert-danger"><strong>Failed! </strong>Asset not active or under maintenance</div>');
                     $this->load->view('qr/template/header');
-                    $this->load->view('qr/template/sidebar_admin');
+                    $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
                     $this->load->view('asset/maintenance/add', $data);
                     $this->load->view('qr/template/footer');
                 } else {
@@ -150,7 +154,7 @@ class Maintenance extends CI_Controller
             } else {
                 $this->session->set_flashdata('msg', '<div class="alert alert-danger"><strong>Failed! </strong>Invalid asset code</div>');
                 $this->load->view('qr/template/header');
-                $this->load->view('qr/template/sidebar_admin');
+                $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
                 $this->load->view('asset/maintenance/add', $data);
                 $this->load->view('qr/template/footer');
             }
@@ -174,7 +178,7 @@ class Maintenance extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/maintenance/edit', $data);
         $this->load->view('qr/template/footer');
     }
@@ -205,7 +209,7 @@ class Maintenance extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
             $this->load->view('asset/maintenance/edit', $data);
             $this->load->view('qr/template/footer');
         } else {
@@ -233,7 +237,7 @@ class Maintenance extends CI_Controller
             } else {
                 $this->session->set_flashdata('msg', '<div class="alert alert-danger"><strong>Failed! </strong>Invalid asset code</div>');
                 $this->load->view('qr/template/header');
-                $this->load->view('qr/template/sidebar_admin');
+                $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
                 $this->load->view('asset/maintenance/edit', $data);
                 $this->load->view('qr/template/footer');
             }

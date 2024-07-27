@@ -108,17 +108,15 @@
                       <td><?php echo $item->durasi ?></td>
                       <td>
                         <div class="btn-group btn-group-sm">
-                          <?php if ($item->created_by == $user_id || $user_id == 2) : ?>
-                            <a href="<?php echo base_url(); ?>asset/peminjaman/view/<?php echo encode_id($item->id); ?>" class="btn btn-info btn-sm mr-3">
-                              <i class="fa fa-eye"></i> View
-                            </a>
-                          <?php endif; ?>
+                          <a href="<?php echo base_url(); ?>asset/peminjaman/view/<?php echo encode_id($item->id); ?>" class="btn btn-info btn-sm mr-3">
+                            <i class="fa fa-eye"></i> View
+                          </a>
                           <?php if ($item->status == "Draft" && $item->created_by == $user_id) : ?>
                             <a href="<?php echo base_url(); ?>asset/peminjaman/edit/<?php echo encode_id($item->id); ?>" class="btn btn-info btn-sm mr-3 <?php echo ($item->status == 'Done') ? 'disabled' : ''; ?>">
                               <i class="fa fa-edit"></i> Edit
                             </a>
                           <?php endif; ?>
-                          <?php if ($item->status == "Submit" && $user_id == 2) : ?>
+                          <?php if ($item->status == "Submit" && $user_level == 2) : ?>
                             <a href="<?php echo base_url(); ?>asset/peminjaman/process/<?php echo encode_id($item->id); ?>" class="btn btn-info btn-sm mr-3 <?php echo ($item->status == 'Done') ? 'disabled' : ''; ?>">
                               <i class="fa fa-edit"></i> Process
                             </a>

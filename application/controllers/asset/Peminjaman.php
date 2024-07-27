@@ -11,11 +11,14 @@ class Peminjaman extends CI_Controller
         if ($this->session->userdata('logged_in') != true) {
             redirect(base_url('auth'));
         }
+        $this->dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $this->dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
     }
 
     public function index()
     {
         $user_id = $this->session->userdata('logged_in')['id'];
+        $user_level = $this->session->userdata('logged_in')['level'];
 
         if ($this->input->post()) {
             $created_by = $this->input->post('created_by');
@@ -34,16 +37,18 @@ class Peminjaman extends CI_Controller
             $user_id,
             $created_by,
             $created_at,
-            $status
+            $status,
+            $user_level
         );
 
         $data = array(
             'get_all_peminjaman' => $filter_result,
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'user_level' => $user_level
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/peminjaman/load_data', $data);
         $this->load->view('qr/template/footer');
     }
@@ -59,7 +64,7 @@ class Peminjaman extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/peminjaman/view', $data);
         $this->load->view('qr/template/footer');
     }
@@ -73,7 +78,7 @@ class Peminjaman extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/peminjaman/add', $data);
         $this->load->view('qr/template/footer');
     }
@@ -141,7 +146,7 @@ class Peminjaman extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/peminjaman/edit', $data);
         $this->load->view('qr/template/footer');
     }
@@ -260,7 +265,7 @@ class Peminjaman extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $this->load->view('qr/template/sidebar_admin', $this->dataMenu);
         $this->load->view('asset/peminjaman/process', $data);
         $this->load->view('qr/template/footer');
     }

@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Peminjaman_Model extends CI_Model
 {
-    public function get_all_peminjaman($user_id, $created_by, $created_at, $status)
+    public function get_all_peminjaman($user_id, $created_by, $created_at, $status, $user_level)
     {
         $this->db->select('
         a.id, 
@@ -24,7 +24,7 @@ class Peminjaman_Model extends CI_Model
         $this->db->join('auth AS d', 'a.created_by = d.id', 'left');
 
         // Apply filters
-        if (!in_array($user_id, [1, 2])) {
+        if (!in_array($user_level, [1, 2])) {
             $this->db->where('a.created_by', $user_id);
         }
         if (!empty($created_at)) {

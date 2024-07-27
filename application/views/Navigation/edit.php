@@ -30,15 +30,15 @@
           </div>
           <!-- /.card-header -->
           <!-- form start -->
-          <form action="<?= base_url('Navigation/update'); ?>" method="post" enctype="multipart/form-data">
+          <form action="<?= base_url('Configuration/Navigation/update'); ?>" method="post" enctype="multipart/form-data">
             <div class="card-body">
               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
               <div class="form-group">
                 <label class="col-md-3 col-form-label">Type</label>
                 <div class="col-md-9">
                   <div class="input-group">
-                    <input type="radio" name="myradio" value="1" <?= $row->type == '1' ? 'checked' : ''; ?> >&nbsp; Menu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="myradio" value="2" <?= $row->type == '2' ? 'checked' : ''; ?> >&nbsp; Sub Menu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="myradio" value="1" <?= $row->type == '1' ? 'checked' : ''; ?>>&nbsp; Menu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="myradio" value="2" <?= $row->type == '2' ? 'checked' : ''; ?>>&nbsp; Sub Menu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </div>
                   <?php echo '<div style="color: red;font-size: 14px">' . form_error('myradio') . '</div>'; ?>
                 </div>
@@ -62,8 +62,8 @@
                 <label class="col-md-3 col-form-label">Visible?</label>
                 <div class="col-md-9">
                   <div class="input-group">
-                    <input type="radio" name="myradio2" value="1" <?= $row->isvisible == '1' ? 'checked' : ''; ?> >&nbsp; True &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="myradio2" value="0" <?= $row->isvisible == '0' ? 'checked' : ''; ?> >&nbsp; False &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="myradio2" value="1" <?= $row->isvisible == '1' ? 'checked' : ''; ?>>&nbsp; True &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="myradio2" value="0" <?= $row->isvisible == '0' ? 'checked' : ''; ?>>&nbsp; False &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </div>
                   <?php echo '<div style="color: red;font-size: 14px">' . form_error('myradio2') . '</div>'; ?>
                 </div>
@@ -73,9 +73,9 @@
                 <div class="col-md-9">
                   <div class="input-group">
                     <select class="js-example-placeholder-single js-states form-control" id="ParentNavigationId" name="ParentNavigationId" style="width:100%">
-                    <?php foreach ($parent as $item) {?>
-                        <option value="<?php echo $item->id;?>" selected><?php echo $item->text;?></option>
-                    <?php }?>
+                      <?php foreach ($parent as $item) { ?>
+                        <option value="<?php echo $item->id; ?>" selected><?php echo $item->text; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
                 </div>
@@ -85,15 +85,15 @@
                 <div class="col-md-9">
                   <div class="input-group">
                     <select class="js-example-placeholder-multiple js-states form-control" id="Roles" name="Roles[]" multiple style="width:100%">
-                    <?php foreach ($roles as $role) {?>
-                        <option value="<?php echo $role->id;?>" selected><?php echo $role->text;?></option>
-                    <?php }?>
+                      <?php foreach ($roles as $role) { ?>
+                        <option value="<?php echo $role->id; ?>" selected><?php echo $role->text; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
                   <?php echo '<div style="color: red;font-size: 14px">' . form_error('Roles') . '</div>'; ?>
                 </div>
               </div>
-              
+
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
@@ -112,82 +112,85 @@
 <!-- /.content -->
 </div>
 <script>
-  $(document).ready(function () {
+  $(document).ready(function() {
     var dropdownRoles = $("#" + "Roles").select2({
-          ajax: {
-              url: "<?= base_url('/Configuration/Navigation/getAllDataRole')?>",
-              dataType: 'json',
-              delay: 250,
-              multiple: true,
-              allowClear: true,
-              data: function (params) {
-                  return {
-                      q: params.term || '', // search term
-                      page: params.page || 1,
-                      rowPerPage: 10
-                  };
-              },
-              processResults: function (data, params) {
-                  //debugger
-                  params.page = params.page || 1;
+      ajax: {
+        url: "<?= base_url('/Configuration/Navigation/getAllDataRole') ?>",
+        dataType: 'json',
+        delay: 250,
+        multiple: true,
+        allowClear: true,
+        data: function(params) {
+          return {
+            q: params.term || '', // search term
+            page: params.page || 1,
+            rowPerPage: 10
+          };
+        },
+        processResults: function(data, params) {
+          //debugger
+          params.page = params.page || 1;
 
-                  return {
-                      results: data.items,
-                      pagination: {
-                          more: (params.page * 10) < data.total_count
-                      }
-                  };
-              },
-              cache: true
-           },
-          placeholder: '-Silahkan pilih-',
-          escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-          minimumInputLength: 0
-           //templateResult: formatRepoPegawai
+          return {
+            results: data.items,
+            pagination: {
+              more: (params.page * 10) < data.total_count
+            }
+          };
+        },
+        cache: true
+      },
+      placeholder: '-Silahkan pilih-',
+      escapeMarkup: function(markup) {
+        return markup;
+      }, // let our custom formatter work
+      minimumInputLength: 0
+      //templateResult: formatRepoPegawai
     });
     var select2Instance = $('#' + "Roles").data('select2');
-    select2Instance.on('results:message', function (params) {
-        this.dropdown._resizeDropdown();
-        this.dropdown._positionDropdown();
+    select2Instance.on('results:message', function(params) {
+      this.dropdown._resizeDropdown();
+      this.dropdown._positionDropdown();
     });
     var dropdownParent = $("#" + "ParentNavigationId").select2({
-          ajax: {
-              url: "<?= base_url('/Configuration/Navigation/getAllDataParentMenu')?>",
-              dataType: 'json',
-              delay: 250,
-              multiple: true,
-              allowClear: true,
-              data: function (params) {
-                  return {
-                      q: params.term || '', // search term
-                      page: params.page || 1,
-                      rowPerPage: 10
-                  };
-              },
-              processResults: function (data, params) {
-                  //debugger
-                  params.page = params.page || 1;
+      ajax: {
+        url: "<?= base_url('/Configuration/Navigation/getAllDataParentMenu') ?>",
+        dataType: 'json',
+        delay: 250,
+        multiple: true,
+        allowClear: true,
+        data: function(params) {
+          return {
+            q: params.term || '', // search term
+            page: params.page || 1,
+            rowPerPage: 10
+          };
+        },
+        processResults: function(data, params) {
+          //debugger
+          params.page = params.page || 1;
 
-                  return {
-                      results: data.items,
-                      pagination: {
-                          more: (params.page * 10) < data.total_count
-                      }
-                  };
-              },
-              cache: true
-           },
-          placeholder: '-Silahkan pilih-',
-          escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-          minimumInputLength: 0
-           //templateResult: formatRepoPegawai
+          return {
+            results: data.items,
+            pagination: {
+              more: (params.page * 10) < data.total_count
+            }
+          };
+        },
+        cache: true
+      },
+      placeholder: '-Silahkan pilih-',
+      escapeMarkup: function(markup) {
+        return markup;
+      }, // let our custom formatter work
+      minimumInputLength: 0
+      //templateResult: formatRepoPegawai
     });
     var select2Instance2 = $('#' + "ParentNavigationId").data('select2');
-    select2Instance.on('results:message', function (params) {
-        this.dropdown._resizeDropdown();
-        this.dropdown._positionDropdown();
+    select2Instance.on('results:message', function(params) {
+      this.dropdown._resizeDropdown();
+      this.dropdown._positionDropdown();
     });
-    
-  });
 
+  });
 </script>
