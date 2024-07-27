@@ -11,7 +11,7 @@ class Maintenance_model extends CI_Model
         $this->db->join('3_asset as b', 'a.asset_id = b.id', 'left');
         $this->db->join('auth as c', 'a.created_by = c.id', 'left');
         if (!in_array($user_level, [1, 4])) {
-            $this->db->where('a.user_id', $user_id);
+            $this->db->where('a.created_by', $user_id);
         }
         if (!empty($created_at)) {
             $this->db->where('DATE(a.created_at)', $created_at);
