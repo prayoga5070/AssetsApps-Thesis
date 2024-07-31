@@ -35,12 +35,19 @@
               <input type="hidden" name="id" value="<?php echo $row->id; ?>">
               <div class="form-group">
                 <label>Kode Asset</label>
-                <input type="text" name="code" class="form-control" value="<?php echo $row->code; ?>">
+                <input type="text" 
+                 name="code" class="form-control" value="<?php echo $row->code; ?>" readonly>
                 <?php echo '<div style="color: red;font-size: 14px">' . form_error('code') . '</div>'; ?>
               </div>
               <div class="form-group">
+                <label>Kategori Asset</label>
+                <input type="text"  disabled class="form-control" value="<?php echo $row->kategoriName; ?>" >
+                <input type="text"  name="id_category" class="form-control" value="<?php echo $row->id_category; ?>" hidden>
+                <?php echo '<div style="color: red;font-size: 14px">' . form_error('name') . '</div>'; ?>
+              </div>
+              <div class="form-group">
                 <label>Nama Asset</label>
-                <input type="text" name="name" class="form-control" value="<?php echo $row->name; ?>">
+                <input type="text"  name="name" class="form-control" value="<?php echo $row->name; ?>">
                 <?php echo '<div style="color: red;font-size: 14px">' . form_error('name') . '</div>'; ?>
               </div>
               <div class="form-group">

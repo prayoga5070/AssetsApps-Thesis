@@ -28,15 +28,16 @@ class Asset extends CI_Controller
 
     public function setup()
     {
-        // $data = array(
-        //     'get_all_asset' => $this->Asset_model->get_all_asset()
-        // );
-
+        $data = array(
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
+        );
+// var_dump($data);exit;
         $this->load->view('qr/template/header');
         $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
         $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+    
         $this->load->view('qr/template/sidebar_admin', $dataMenu);
-        $this->load->view('qr/admin/asset');
+        $this->load->view('qr/admin/asset',$data);
         $this->load->view('qr/template/footer');
     }
 
@@ -45,8 +46,11 @@ class Asset extends CI_Controller
         $this->load->view('qr/template/header');
         $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
         $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $data = array(
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
+        );
         $this->load->view('qr/template/sidebar_admin', $dataMenu);
-        $this->load->view('qr/admin/add');
+        $this->load->view('qr/admin/add',$data);
         $this->load->view('qr/template/footer');
     }
 
@@ -54,7 +58,8 @@ class Asset extends CI_Controller
     {
         $id_asset = decode_id($id);
         $data = array(
-            'row' => $this->Asset_model->get_asset($id_asset)
+            'row' => $this->Asset_model->get_asset($id_asset),
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
         );
         $this->load->view('qr/template/header');
         $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
@@ -68,7 +73,8 @@ class Asset extends CI_Controller
     {
         // Edit : Params with link QR
         // get path assets
-        $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
+        $path=base_url('qr/asset/scan_detail');
+        // $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
         $param = $path . "/" . $qrcode;
         qrcode::png(
             $param,
@@ -90,8 +96,8 @@ class Asset extends CI_Controller
         $this->form_validation->set_rules('name', 'Name Asset', 'required');
         $this->form_validation->set_rules('year_acq', 'Tahun Akuisisi', 'required');
         $this->form_validation->set_rules('status', 'Status', 'required');
-        $this->form_validation->set_rules('user', 'User', 'required');
-        $this->form_validation->set_rules('location', 'Location', 'required');
+        // $this->form_validation->set_rules('user', 'User', 'required');
+        // $this->form_validation->set_rules('location', 'Location', 'required');
         $this->form_validation->set_rules('qr_code', 'QR Code', 'is_unique[aset.qrcode]');
 
         if ($this->form_validation->run() != false) {
@@ -103,6 +109,7 @@ class Asset extends CI_Controller
             $data = array(
                 'code' => $this->input->post('code'),
                 'name' => $this->input->post('name'),
+                'id_category' => $this->input->post('id_category'),
                 'year_acq' => $this->input->post('year_acq'),
                 'status' => $this->input->post('status'),
                 'user' => $this->input->post('user'),
@@ -162,6 +169,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -199,6 +207,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -228,6 +237,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -250,6 +260,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['user'];
             $row[] =  $list['location'];
@@ -269,8 +280,8 @@ class Asset extends CI_Controller
         $this->form_validation->set_rules('name', 'Name Asset', 'required');
         $this->form_validation->set_rules('year_acq', 'Tahun Akuisisi', 'required');
         $this->form_validation->set_rules('status', 'Status', 'required');
-        $this->form_validation->set_rules('user', 'User', 'required');
-        $this->form_validation->set_rules('location', 'Location', 'required');
+        // $this->form_validation->set_rules('user', 'User', 'required');
+        // $this->form_validation->set_rules('location', 'Location', 'required');
 
         $id = $this->input->post('id');
 
@@ -396,6 +407,7 @@ class Asset extends CI_Controller
         $header = [
             array(
                 "Kode Asset",
+                "Kategori",
                 "Nama Asset",
                 "Year Acquisation",
                 "Status",
@@ -608,18 +620,20 @@ class Asset extends CI_Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', 'Code');
-        $sheet->setCellValue('B1', 'Name');
-        $sheet->setCellValue('C1', 'Status');
-        $sheet->setCellValue('D1', 'User');
-        $sheet->setCellValue('E1', 'Location');
+        $sheet->setCellValue('B1', 'Kategori Name');
+        $sheet->setCellValue('C1', 'Name');
+        $sheet->setCellValue('D1', 'Status');
+        $sheet->setCellValue('E1', 'User');
+        $sheet->setCellValue('F1', 'Location');
 
         $row = 2;
         foreach ($data['data'] as $item) {
             $sheet->setCellValue('A' . $row, $item['code']);
-            $sheet->setCellValue('B' . $row, $item['name']);
-            $sheet->setCellValue('C' . $row, $item['status']);
-            $sheet->setCellValue('D' . $row, $item['user']);
-            $sheet->setCellValue('E' . $row, $item['location']);
+            $sheet->setCellValue('B' . $row, $item['kategoriName']);
+            $sheet->setCellValue('C' . $row, $item['name']);
+            $sheet->setCellValue('D' . $row, $item['status']);
+            $sheet->setCellValue('E' . $row, $item['user']);
+            $sheet->setCellValue('F' . $row, $item['location']);
             $row++;
         }
 

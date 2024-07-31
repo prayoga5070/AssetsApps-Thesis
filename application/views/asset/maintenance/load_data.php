@@ -65,11 +65,11 @@
 
     <!-- /.row -->
     <!-- small box -->
-    <div class="col-lg-1 col-12">
+    <div class="col-lg-3 col-12">
       <a href="<?= base_url(); ?>asset/maintenance/add" class="small-box-footer">
-        <div class="small-box bg-success">
+        <div class="small-box bg-primary">
           <div class="inner text-center">
-            <h5>Create</h5>
+            <h3>Create</h3>
           </div>
         </div>
       </a>

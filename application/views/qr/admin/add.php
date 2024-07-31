@@ -37,6 +37,16 @@
                 <input type="text" name="code" class="form-control" placeholder="Input Kode Asset">
                 <?php echo '<div style="color: red;font-size: 14px">' . form_error('code') . '</div>'; ?>
               </div>
+              <div class="form-group ">
+                <label>Kategori</label>
+                <select id="kategoriAsset" name='id_category' class="form-control">
+                  <?php
+                  foreach ($assetCategories as $row) {
+                  ?>
+                    <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                  <?php } ?>
+                </select>
+              </div>
               <div class="form-group">
                 <label>Nama Asset</label>
                 <input type="text" name="name" class="form-control" placeholder="Input Nama Asset">
@@ -45,7 +55,7 @@
               <div class="form-group">
                 <label>Year Acquisation</label>
                 <select class="form-control" name="year_acq">
-                <?php echo '<div style="color: red;font-size: 14px">' . form_error('year_acq') . '</div>'; ?>
+                  <?php echo '<div style="color: red;font-size: 14px">' . form_error('year_acq') . '</div>'; ?>
                   <?php
                   for ($year = (int)date('Y'); 2000 <= $year; $year--) : ?>
                     <option value="<?= $year; ?>"><?= $year; ?></option>
@@ -79,8 +89,8 @@
               </div>
               <div class="form-group">
                 <label>Photo</label>
-                  <input type="file" class="form-control" name="fileupload">* <h8>Hanya dapat upload gambar</h8>
-                  <p><span class="text-danger">*</span> <b>Data mandatory harus diisi</b></p>
+                <input type="file" class="form-control" name="fileupload">* <h8>Hanya dapat upload gambar</h8>
+                <p><span class="text-danger">*</span> <b>Data mandatory harus diisi</b></p>
               </div>
             </div>
             <!-- /.card-body -->

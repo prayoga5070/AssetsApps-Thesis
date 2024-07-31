@@ -53,16 +53,21 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="input-group">
-                                        <label class="col-md-3">Status</label>
+                                        <label class="col-md-3">Kategori</label>
+
                                         <div class="col-sm-9">
-
-                                            <select id="status-data" name="statusAsset" class="form-control select2">
-                                                <option value="">-- ALL STATUS --</option>
-
+                                            <select id="kategoriAsset" class="form-control">
+                                                <option value="">-- Pilih Kategori --</option>
+                                                <?php
+                                                foreach ($assetCategories as $row) {
+                                                ?>
+                                                    <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class=" col-md-6">
 
@@ -80,6 +85,21 @@
                                         <label class="col-md-3">Location</label>
                                         <div class="col-sm-9">
                                             <input type="text" id="locationAsset" class="form-control ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Status</label>
+                                        <div class="col-sm-9">
+
+                                            <select id="statusAsset" name="statusAsset" class="form-control select2">
+                                                <option value="">-- ALL STATUS --</option>
+                                                <option value="Maintenance">Maintenance</option>
+                                                <option value="Writeoff">Writeoff</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -110,6 +130,7 @@
                                 <thead>
                                     <tr>
                                         <th>Kode Asset</th>
+                                        <th>Kategori Asset</th>
                                         <th>Nama Asset</th>
                                         <th>Status</th>
                                         <th>User</th>
@@ -166,6 +187,8 @@
                         "locationAsset": $('#locationAsset').val(),
                         "nameAsset": $('#nameAsset').val(),
                         "kodeAsset": $('#kodeAsset').val(),
+                        "kategori": $('#kategoriAsset').val(),
+
                         "userAsset": $('#userAsset').val()
                     });
                 }

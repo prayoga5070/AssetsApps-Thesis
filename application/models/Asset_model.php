@@ -7,7 +7,10 @@ class Asset_model extends CI_Model
 
   public function get_all_asset()
   {
-    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location, a.description,a.created_at')->where(['a.deleted_at' => NULL])->order_by('a.created_at', 'DESC')->get('3_asset as a');
+    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user,
+     a.location, a.description,a.created_at,a.id_category,c.name as kategoriName')
+    ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+    ->where(['a.deleted_at' => NULL])->order_by('a.created_at', 'DESC')->get('3_asset as a');
 
     $data = $result->result();
     return $data;
@@ -15,7 +18,13 @@ class Asset_model extends CI_Model
 
   public function get_asset($id)
   {
-    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location, a.description, b.file_path, b.file_name')->join('3_file_asset as b', 'a.id=b.id_asset', 'left')->where(['a.deleted_at' => NULL, 'a.id' => $id])->get('3_asset as a');
+    $result = $this->db
+    ->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, 
+    a.location, a.description, b.file_path, b.file_name,a.id_category,c.name as kategoriName')
+    ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
+    ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+
+    ->where(['a.deleted_at' => NULL, 'a.id' => $id])->get('3_asset as a');
 
     $data = $result->row();
     return $data;
@@ -23,7 +32,11 @@ class Asset_model extends CI_Model
 
   public function log_asset($id_asset)
   {
-    $result = $this->db->select('a.id, a.code, a.name, a.year_acq, a.status, a.user, a.location, a.description, a.created_at')->where(['a.id_asset' => $id_asset])->order_by('a.created_at', 'DESC')->get('3_log_asset as a');
+    $result = $this->db->select('a.id, a.code, a.name, a.year_acq, a.status, a.user, a.location, 
+    a.description, a.created_at,a.id_category,c.name as kategoriName')
+    ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+
+    ->where(['a.id_asset' => $id_asset])->order_by('a.created_at', 'DESC')->get('3_log_asset as a');
 
     $data = $result->result();
     return $data;
@@ -31,7 +44,11 @@ class Asset_model extends CI_Model
 
   public function asset_qr($qr)
   {
-    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location, a.description, b.file_path, b.file_name')->join('3_file_asset as b', 'a.id=b.id_asset', 'left')->where(['a.deleted_at' => NULL, 'a.qrcode' => $qr])->get('3_asset as a');
+    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location, 
+    a.description, b.file_path, b.file_name,a.id_category,c.name as kategoriName')
+    ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+    ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
+    ->where(['a.deleted_at' => NULL, 'a.qrcode' => $qr])->get('3_asset as a');
 
     $data = $result->row();
     return $data;
@@ -39,7 +56,11 @@ class Asset_model extends CI_Model
 
   public function asset_code($code)
   {
-    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location, a.description, b.file_path, b.file_name')->join('3_file_asset as b', 'a.id=b.id_asset', 'left')->where(['a.deleted_at' => NULL, 'a.code' => $code])->get('3_asset as a');
+    $result = $this->db->select('a.id, a.code, a.name , a.qrcode, a.year_acq, a.status, a.user, a.location,
+     a.description, b.file_path, b.file_name,a.id_category,c.name as kategoriName')
+    ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+    ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
+    ->where(['a.deleted_at' => NULL, 'a.code' => $code])->get('3_asset as a');
 
     $data = $result->row();
     return $data;
@@ -47,7 +68,8 @@ class Asset_model extends CI_Model
   public function GetData($request) {
     // Array of database columns which should be read and sent back to DataTables. Use a space where
     // you want to insert a non-database field (for example a counter or static image)
-    $aColumns = array('id', 'code', 'name', 'qrcode', 'year_acq', 'status', 'user', 'location', 'description', 'created_at');
+    $aColumns = array('a.code', 'b.name', 'a.name', 'a.qrcode', 
+    'a.year_acq', 'a.status', 'a.user', 'a.location', 'a.description', 'a.created_at');
     // Indexed column (used for fast and accurate table cardinality)
     $sIndexColumn = $aColumns[0];
     // DB table to use
@@ -72,11 +94,12 @@ class Asset_model extends CI_Model
     }
 
     // Filtering
-    $sWhere = "where deleted_at is null ";
+    $sWhere = "where a.deleted_at is null ";
     if (
       (isset($request['kodeAsset'])&&$request['kodeAsset']!='') || 
       (isset($request['nameAsset'])&&$request['nameAsset']!='')||
       (isset($request['statusAsset'])&&$request['statusAsset']!='')||
+      (isset($request['kategori'])&&$request['kategori']!='')||
       (isset($request['userAsset'])&&$request['userAsset']!='')||
       (isset($request['locationAsset'])&&$request['locationAsset']!=''))
       
@@ -84,30 +107,35 @@ class Asset_model extends CI_Model
 
       if(  (isset($request['kodeAsset'])&&$request['kodeAsset']!='')){
         $sWhere.=' and ';
-        $sWhere.='code like \'%'.$request['kodeAsset'].'%\'';
+        $sWhere.='a.code like \'%'.$request['kodeAsset'].'%\'';
+      }
+      if(  (isset($request['kategori'])&&$request['kategori']!='')){
+        $sWhere.=' and ';
+        $sWhere.=' b.id = '.$request['kategori'].' ';
       }
       if(  (isset($request['nameAsset'])&&$request['nameAsset']!='')){
           $sWhere.=' and ';
-        $sWhere.='name like \'%'.$request['nameAsset'].'%\'';
+        $sWhere.='a.name like \'%'.$request['nameAsset'].'%\'';
       }
       if(  (isset($request['statusAsset'])&&$request['statusAsset']!='')){
           $sWhere.=' and ';
-        $sWhere.='status like \'%'.$request['statusAsset'].'%\'';
+        $sWhere.='a.status = \''.$request['statusAsset'].'\'';
       }
       if(  (isset($request['userAsset'])&&$request['userAsset']!='')){
           $sWhere.=' and ';
-        $sWhere.='user like \'%'.$request['userAsset'].'%\'';
+        $sWhere.='a.user like \'%'.$request['userAsset'].'%\'';
       }
       if(  (isset($request['locationAsset'])&&$request['locationAsset']!='')){
           $sWhere.=' and ';
-        $sWhere.='location like \'%'.$request['locationAsset'].'%\'';
+        $sWhere.='a.location like \'%'.$request['locationAsset'].'%\'';
       }
     }
    
     // SQL queries
     $sQuery = "
-          SELECT id,code,name,qrcode,year_acq,status,user,location,description,created_at
-          FROM $sTable
+          SELECT a.id, a.code,a.name,a.qrcode,a.year_acq,a.status,a.user,a.location,a.description,
+          a.created_at,b.name as kategoriName
+          FROM $sTable join 3_category_asset b on a.id_category = b.id
           $sWhere
           $sOrder
           $sLimit";
@@ -129,7 +157,8 @@ class Asset_model extends CI_Model
   }
   public function get_all_asset_category()
   {
-    $result = $this->db->select('a.id, a.name, a.id_department')->where(['a.deleted_at' => NULL])->get('3_category_asset as a');
+    $result = $this->db->select('a.id, a.name, a.id_department')
+    ->where(['a.deleted_at' => NULL])->get('3_category_asset as a');
 
     $data = $result->result();
     return $data;

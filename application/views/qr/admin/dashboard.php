@@ -46,6 +46,22 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">Kategori</label>
+
+                  <div class="col-sm-9">
+                    <select id="kategoriAsset" class="form-control">
+                      <option value="">-- Pilih Kategori --</option>
+                      <?php
+                      foreach ($assetCategories as $row) {
+                      ?>
+                        <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class=" col-md-6">
               <div class="form-group row">
@@ -99,6 +115,7 @@
           <thead>
             <tr>
               <th>Kode</th>
+              <th>Kategori</th>
               <th>Nama</th>
               <th>User</th>
               <th>Location</th>
@@ -153,6 +170,7 @@
             "locationAsset": $('#locationAsset').val(),
             "nameAsset": $('#nameAsset').val(),
             "kodeAsset": $('#kodeAsset').val(),
+            "kategori": $('#kategoriAsset').val(),
             "userAsset": $('#userAsset').val()
           });
         }

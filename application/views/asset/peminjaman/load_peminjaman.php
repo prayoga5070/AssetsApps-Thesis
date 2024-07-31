@@ -24,8 +24,8 @@
     <!-- /.row -->
     <!-- small box -->
     <a href="<?= base_url(); ?>asset/peminjaman/add" class="small-box-footer">
-      <div class="small-box bg-success">
-        <div class="inner text-center">
+    <div class="small-box bg-primary">
+        <div class="inner">
           <h3>Buat Pengajuan</h3>
         </div>
       </div>
