@@ -510,6 +510,7 @@ class Asset extends CI_Controller
         $header = [
             array(
                 "Kode Asset",
+                "Kategori",
                 "Nama Asset",
                 "Year Acquisation",
                 "Status",
@@ -546,22 +547,36 @@ class Asset extends CI_Controller
                                     $notFounded .= "<br/>";
                                     continue;
                                 }
+                                if ((!isset($dataloop[1])
+                                    || $dataloop[1] == '')) {
+                                    $notFounded .= "Katgori Asset In Row " . ($counter - 1) . " Tidak Terisi";
+                                    $notFounded .= "<br/>";
+                                    continue;
+                                }
+                                $dataKategori = $assetModel->get_one_category($dataloop[1]);
+                                // var_dump($dataloop[1]);
+                                // var_dump($dataKategori);exit;
+                                if (!isset($dataKategori)) {
+                                    $notFounded .= "Kategori Asset " . $dataloop[1] . " In Row " . ($counter - 1) . " Already Exist";
+                                    $notFounded .= "<br/>";
+                                    continue;
+                                }
                                 $dataDetail = $assetModel->asset_code($dataloop[0]);
                                 if (isset($dataDetail)) {
                                     $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " Already Exist";
                                     $notFounded .= "<br/>";
                                     continue;
                                 }
-                                if ((isset($dataloop[4])
-                                    && $dataloop[4] != '')) {
-                                    if ((!isset($dataloop[5]))) {
+                                if ((isset($dataloop[5])
+                                    && $dataloop[6] != '')) {
+                                    if ((!isset($dataloop[6]))) {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " location tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;
                                     }
                                 }
-                                if ((isset($dataloop[5]) && $dataloop[5] != '')) {
-                                    if (!isset($dataloop[4])) {
+                                if ((isset($dataloop[6]) && $dataloop[5] != '')) {
+                                    if (!isset($dataloop[5])) {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " User tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;
@@ -571,19 +586,20 @@ class Asset extends CI_Controller
                                 $id_user = $this->session->userdata('logged_in')['id'];
                                 $data = array(
                                     'code' => $dataloop[0],
-                                    'name' => $dataloop[1],
-                                    'year_acq' => $dataloop[2],
-                                    'status' => $dataloop[3],
-                                    'user' => $dataloop[4],
-                                    'location' => $dataloop[5],
+                                    'id_category'=>$dataKategori[0]->id,
+                                    'name' => $dataloop[2],
+                                    'year_acq' => $dataloop[3],
+                                    'status' => $dataloop[4],
+                                    'user' => $dataloop[5],
+                                    'location' => $dataloop[6],
                                     'qrcode' => $random,
-                                    'description' => $dataloop[6],
+                                    'description' => $dataloop[7],
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                     'deleted_at' => NULL,
                                     'id_user' => $id_user
                                 );
-                                // $this->db->insert('3_asset', $data);
+                                $this->db->insert('3_asset', $data);
                                 $counterSaved++;
                             }
                         } else {

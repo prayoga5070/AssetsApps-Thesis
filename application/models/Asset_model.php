@@ -163,6 +163,18 @@ class Asset_model extends CI_Model
     $data = $result->result();
     return $data;
   }
+  public function get_one_category($kategoriName)
+  {
+    $result = $this->db->select('a.id, a.name, a.id_department')
+    ->where(['a.deleted_at' => NULL])
+    ->where(['a.name' => $kategoriName])
+    
+    ->get('3_category_asset as a');
+
+    $data = $result->result();
+    return $data;
+  }
+  
 }
 
 /* End of file Stock_model.php */
