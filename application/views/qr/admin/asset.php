@@ -63,6 +63,16 @@
                                 </div>
                             </div>
                             <div class=" col-md-6">
+
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">User</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="userAsset" class="form-control ">
+                                        </div>
+
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <div class="input-group">
                                         <label class="col-md-3">Status</label>
@@ -77,15 +87,6 @@
 
                                             </select>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="input-group">
-                                        <label class="col-md-3">User</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" id="userAsset" class="form-control ">
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
