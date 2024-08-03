@@ -82,12 +82,18 @@
                 </div>
         </form>
       </div>
+
     </div>
-    <div class="col-lg-12 mt-3">
-      <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-      <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-      <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-lg-12 mt-3">
+          <button type="button" class="btn btn-sm btn-secondary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="resetForm()">Reset</button>
+          <button type="button" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="list()">Search</button>
+        </div>
+      </div>
     </div>
+
+
     <div class="col-lg-3 col-12">
       <div><br /></div>
       <!-- small box -->

@@ -69,7 +69,7 @@
                                         <div class="col-sm-9">
 
                                             <select id="status-data" name="statusAsset" class="form-control select2">
-                                            <option value="">-- ALL STATUS --</option>
+                                                <option value="">-- ALL STATUS --</option>
                                                 <option value="Maintenance">Maintenance</option>
                                                 <option value="Writeoff">Writeoff</option>
                                                 <option value="Active">Active</option>
@@ -93,14 +93,11 @@
                         </div>
                     </form>
                 </div>
-
-                <div class="col-lg-12 mt-3">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-                    <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-
-
-
+                <div class="row">
+                    <div class="col-lg-12 mt-3">
+                        <button type="button" class="btn btn-sm btn-secondary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="resetForm()">Reset</button>
+                        <button type="button" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="list()">Search</button>
+                    </div>
                 </div>
                 <div><br /></div>
                 <?php if ($this->session->userdata('logged_in')['dept'] == 6) { ?>
