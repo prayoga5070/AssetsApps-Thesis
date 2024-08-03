@@ -130,7 +130,7 @@
                     <thead>
                         <tr>
                             <th>Kode Asset</th>
-                            <th>Katgoeri Asset</th>
+                            <th>Kategori Asset</th>
                             <th>Nama Asset</th>
                             <th>Status</th>
                             <th>User</th>
