@@ -50,14 +50,6 @@
                                             <div id="date_error" style="color: red; font-size: 14px;"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="location" class="col-sm-3 col-form-label">Location</label>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control" name="location" value="<?php echo $row->location ?>">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
@@ -67,7 +59,7 @@
                                         </div>
                                         <hr>
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalPinjamAsset">Tambah Asset</button>
+                                            <button id="btnTambahAsset" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalPinjamAsset">Tambah Asset</button>
                                         </div>
                                         <div class="form-group row mt-1 col-9">
                                             <div class="table-responsive">
@@ -77,7 +69,9 @@
                                                             <th>Id</th>
                                                             <th>Category Id</th>
                                                             <th>Kategori Asset</th>
-                                                            <th>Quantity</th>
+                                                            <th>User Id</th>
+                                                            <th>User</th>
+                                                            <th>Location</th>
                                                             <th>Description</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -90,7 +84,9 @@
                                                                 <td><?php echo $item->id ?></td>
                                                                 <td><?php echo $item->category_id ?></td>
                                                                 <td><?php echo $item->name ?></td>
-                                                                <td><?php echo $item->quantity ?></td>
+                                                                <td><?php echo $item->user_id ?></td>
+                                                                <td><?php echo $item->user_name ?></td>
+                                                                <td><?php echo $item->location ?></td>
                                                                 <td><?php echo $item->description ?></td>
                                                                 <td>
                                                                     <div class="btn-group btn-group-sm">
@@ -183,8 +179,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty_modal" class="col-form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty_modal" id="qty_modal" value="<?php echo set_value('code'); ?>" min="1">
+                                            <label for="user_modal" class="col-form-label">User</label>
+                                            <div>
+                                                <select id="user_modal" name="user_modal" class="form-control">
+                                                    <option value="">-- Pilih User --</option>
+                                                    <?php
+                                                    foreach ($users as $item2) {
+                                                    ?>
+                                                        <option value=<?php echo $item2->id ?>><?php echo $item2->name ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="location_modal" class="col-form-label">Location</label>
+                                            <input type="text" class="form-control" name="location_modal" id="location_modal" value="<?php echo set_value('code'); ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="note_modal" class="col-sm-3 col-form-label">Description</label>
@@ -254,8 +263,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty_edit_modal" class="col-form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty_edit_modal" id="qty_edit_modal" value="<?php echo set_value('code'); ?>" min="1">
+                                            <label for="user_edit_modal" class="col-form-label">User</label>
+                                            <div>
+                                                <select id="user_edit_modal" name="user_edit_modal" class="form-control">
+                                                    <option value="">-- Pilih User --</option>
+                                                    <?php
+                                                    foreach ($users as $item2) {
+                                                    ?>
+                                                        <option value=<?php echo $item2->id ?>><?php echo $item2->name ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="location_edit_modal" class="col-form-label">Location</label>
+                                            <input type="text" class="form-control" name="location_edit_modal" id="location_edit_modal" value="<?php echo set_value('code'); ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="note_edit_modal" class="col-sm-3 col-form-label">Description</label>
@@ -282,7 +304,6 @@
     </div>
 </div>
 
-
 <style>
     .error {
         color: red;
@@ -294,6 +315,7 @@
     $(document).ready(function() {
         var row;
         var rowData;
+        let state = '';
 
         var table = $("#gridPinjamAsset").DataTable({
             "responsive": true,
@@ -303,17 +325,27 @@
                 [5]
             ],
             "dom": '<"top"l>rt<"bottom"ip><"">',
-            // "columnDefs": [{
-            //         "targets": 0,
-            //         "visible": false,
-            //         "searchable": false
-            //     },
-            //     {
-            //         "targets": 1,
-            //         "visible": false,
-            //         "searchable": false
-            //     }
-            // ]
+            "columnDefs": [{
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": 1,
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": 3,
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
+        });
+
+        $('#btnTambahAsset').click(function() {
+            $('#form_modal')[0].reset();
+            state = 'add';
         });
 
         // Custom validation rule for integers greater than 0
@@ -454,8 +486,9 @@
 
             $('#id_edit_modal').val(rowData[0]).change();
             $('#category_edit_modal').val(rowData[1]).change();
-            $('#qty_edit_modal').val(rowData[3]);
-            $('#note_edit_modal').val(rowData[4]);
+            $('#user_edit_modal').val(rowData[3]);
+            $('#location_edit_modal').val(rowData[5]);
+            $('#note_edit_modal').val(rowData[6]);
 
             $('#modalEditPinjamAsset').modal('show');
         });
@@ -487,8 +520,10 @@
                     tableData.push({
                         id: data[0],
                         asset_category_id: data[1],
-                        quantity: data[3],
-                        description: data[4]
+                        user_id: data[3],
+                        user: data[4],
+                        location: data[5],
+                        description: data[6]
                     });
                 });
                 var combinedData = {
@@ -508,9 +543,6 @@
                     success: function(resp) {
                         // console.dir(resp);
                         window.location.href = resp.url;
-                    },
-                    error: function(xhr, status, error) {
-                        alert.error('Error submitting form', error);
                     }
                 });
             }
@@ -533,14 +565,18 @@
             if ($("#form_modal").valid()) {
                 var categoryId = $('#category_modal option:selected').val();
                 var category = $('#category_modal option:selected').text();
-                var qty = $('#qty_modal').val();
+                var userId = $('#user_modal option:selected').val();
+                var user = $('#user_modal option:selected').text();
+                var location = $('#location_modal').val();
                 var note = $('#note_modal').val();
 
                 table.row.add([
                     0,
                     categoryId,
                     category,
-                    qty,
+                    userId,
+                    user,
+                    location,
                     note,
                     '<div class="btn-group btn-group-sm">' +
                     '<button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">' +
@@ -561,16 +597,20 @@
                 var id = $('#id_edit_modal').val();
                 var categoryId = $('#category_edit_modal option:selected').val();
                 var category = $('#category_edit_modal option:selected').text();
-                var qty = $('#qty_edit_modal').val();
+                var userId = $('#user_edit_modal option:selected').val();
+                var user = $('#user_edit_modal option:selected').text();
+                var location = $('#location_edit_modal').val();
                 var note = $('#note_edit_modal').val();
 
                 table.row(row).data([
                     id,
                     categoryId,
                     category,
-                    qty,
+                    userId,
+                    user,
+                    location,
                     note,
-                    rowData[5]
+                    rowData[7]
                 ]).draw(false);
 
                 $('#modalEditPinjamAsset').modal('hide');

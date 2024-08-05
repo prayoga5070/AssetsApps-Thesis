@@ -101,7 +101,6 @@ class Peminjaman extends CI_Controller
         $data = array(
             'start_date' => $_POST['start_date'],
             'end_date' => $_POST['end_date'],
-            // 'location' => $_POST['location'],
             'description' => $_POST['description'],
             'status' => $_POST['status'],
             'created_by' => $user_id,
@@ -139,7 +138,8 @@ class Peminjaman extends CI_Controller
             'row' => $this->Peminjaman_model->get($id_log),
             'categories' =>  $this->Peminjaman_model->get_peminjaman_category($id_log),
             'assets' => $this->Peminjaman_model->get_peminjaman_category_asset($id_log),
-            'assetCategories' => $this->Asset_model->get_all_asset_category()
+            'assetCategories' => $this->Asset_model->get_all_asset_category(),
+            'users' => $this->Auth_model->get_all_active_users()
         );
 
         $this->load->view('qr/template/header');
@@ -183,7 +183,6 @@ class Peminjaman extends CI_Controller
             $data = array(
                 'start_date' => $_POST['start_date'],
                 'end_date' => $_POST['end_date'],
-                'location' => $_POST['location'],
                 'description' => $_POST['description'],
                 'status' => $_POST['status'],
                 'updated_by' => $user_id,
@@ -211,7 +210,8 @@ class Peminjaman extends CI_Controller
             foreach ($table_data as $row) {
                 $asset_data = array(
                     'asset_category_id' => $row['asset_category_id'],
-                    'quantity' => $row['quantity'],
+                    'user_id' => $row['user_id'],
+                    'location' => $row['location'],
                     'description' => $row['description']
                 );
 

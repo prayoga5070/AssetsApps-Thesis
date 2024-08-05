@@ -70,7 +70,7 @@
                                                         <tr>
                                                             <th>Id</th>
                                                             <th>Kategori Asset</th>
-                                                            <th>UserId</th>
+                                                            <th>User Id</th>
                                                             <th>User</th>
                                                             <th>Location</th>
                                                             <th>Description</th>
