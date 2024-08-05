@@ -12,18 +12,20 @@ class Asset extends CI_Controller
         if ($this->session->userdata('logged_in') != TRUE) {
             redirect(base_url('auth'));
         }
+        $this->dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $this->dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
     }
 
     public function index()
-	{
+    {
         $data = array(
             'get_all_asset' => $this->Asset_model->get_all_asset()
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar', $data);
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/dashboard', $data);
         $this->load->view('qr/template/footer');
-	}
+    }
 
     public function setup()
     {
@@ -32,7 +34,7 @@ class Asset extends CI_Controller
         );
 
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar');
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/asset', $data);
         $this->load->view('qr/template/footer');
     }
@@ -55,7 +57,7 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->get_asset($id_asset)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar');
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/detail', $data);
         $this->load->view('qr/template/footer');
     }
@@ -63,7 +65,7 @@ class Asset extends CI_Controller
     public function scan()
     {
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar');
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/scan');
         $this->load->view('qr/template/footer');
     }
@@ -75,7 +77,7 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->asset_qr($id)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar');
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/view', $data);
         $this->load->view('qr/template/footer');
     }
@@ -86,9 +88,8 @@ class Asset extends CI_Controller
             'assets' => $this->Asset_model->get_all_asset(),
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar');
+        $this->load->view('qr/template/sidebar', $this->dataMenu);
         $this->load->view('qr/user/report', $data);
         $this->load->view('qr/template/footer');
     }
-
 }
