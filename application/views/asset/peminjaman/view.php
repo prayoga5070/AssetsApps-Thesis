@@ -49,14 +49,6 @@
                                         <div id="date_error" style="color: red; font-size: 14px;"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="location" class="col-sm-3 col-form-label">Location</label>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" name="location" value="<?php echo $row->location; ?>" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="description" class="col-sm-3 col-form-label">Description</label>
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -82,7 +74,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Kategori Asset</th>
-                                                        <th>Quantity</th>
+                                                        <th>User</th>
+                                                        <th>Location</th>
                                                         <th>Description</th>
                                                     </tr>
                                                 </thead>
@@ -92,7 +85,8 @@
                                                     ?>
                                                         <tr>
                                                             <td><?php echo $row->name ?></td>
-                                                            <td><?php echo $row->quantity ?></td>
+                                                            <td><?php echo $row->user_name ?></td>
+                                                            <td><?php echo $row->location ?></td>
                                                             <td><?php echo $row->description ?></td>
                                                         </tr>
                                                     <?php } ?>
@@ -113,6 +107,7 @@
                                                         <th>Code</th>
                                                         <th>Name</th>
                                                         <th>Photo</th>
+                                                        <th>User</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -125,6 +120,7 @@
                                                             <td>
                                                                 <img src="<?php echo base_url($item2->file_path . "/" . $item2->file_name); ?>" style="display: block;margin-left: auto;margin-right: auto;" width="35%" height="35%">
                                                             </td>
+                                                            <td><?php echo $item2->user_name ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                 </tbody>

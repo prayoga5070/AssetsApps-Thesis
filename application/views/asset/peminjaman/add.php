@@ -50,14 +50,6 @@
                                             <div id="date_error" style="color: red; font-size: 14px;"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="location" class="col-sm-3 col-form-label">Location</label>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control" name="location">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
@@ -69,7 +61,7 @@
                                         <hr>
 
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalPinjamAsset">Tambah Asset</button>
+                                            <button id="btnTambahAsset" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalPinjamAsset">Tambah Asset</button>
                                         </div>
                                         <div class="form-group row mt-1 col-9">
                                             <div class="table-responsive">
@@ -78,7 +70,9 @@
                                                         <tr>
                                                             <th>Id</th>
                                                             <th>Kategori Asset</th>
-                                                            <th>Quantity</th>
+                                                            <th>UserId</th>
+                                                            <th>User</th>
+                                                            <th>Location</th>
                                                             <th>Description</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -127,7 +121,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div>Tambah Aset Dipinjam</div>
+                <div id="popup-title">Tambah Aset Dipinjam</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -155,28 +149,40 @@
                                                 <select id="category_modal" name="category_modal" class="form-control">
                                                     <option value="">-- Pilih Kategori --</option>
                                                     <?php
-                                                    foreach ($assetCategories as $row) {
+                                                    foreach ($assetCategories as $item) {
                                                     ?>
-                                                        <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                                                        <option value=<?php echo $item->id ?>><?php echo $item->name ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty_modal" class="col-form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty_modal" id="qty_modal" value="<?php echo set_value('code'); ?>" min="1">
+                                            <label for="user_modal" class="col-form-label">User</label>
+                                            <div>
+                                                <select id="user_modal" name="user_modal" class="form-control">
+                                                    <option value="">-- Pilih User --</option>
+                                                    <?php
+                                                    foreach ($users as $item2) {
+                                                    ?>
+                                                        <option value=<?php echo $item2->id ?>><?php echo $item2->name ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="location_modal" class="col-form-label">Location</label>
+                                            <input type="text" class="form-control" name="location_modal" id="location_modal" value="<?php echo set_value('code'); ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="note_modal" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <textarea type="text" class="form-control" id="note_modal" name="note_modal" rows="6"></textarea>
-                                                    <!-- <input type="text" class="form-control" name="note_modal" id="note_modal"> -->
                                                 </div>
                                             </div>
                                         </div>
                                         <div>
-                                            <button id="btnAddCategoryPeminjaman" type="button" class="btn btn-info">Add</button></a>
+                                            <button id="btnSaveCategoryPeminjaman" type="button" class="btn btn-info">Save</button></a>
                                         </div>
                                     </form>
                                 </div><!-- /.card-body -->
@@ -201,7 +207,8 @@
 
 <script>
     $(document).ready(function() {
-        let abc = "";
+        let state = '';
+        let row;
 
         var table = $("#gridPinjamAsset").DataTable({
             "responsive": true,
@@ -215,7 +222,17 @@
                 "targets": 0,
                 "visible": false,
                 "searchable": false
+            }, {
+                "targets": 2,
+                "visible": false,
+                "searchable": false
             }]
+        });
+
+        $('#btnTambahAsset').click(function() {
+            $('#form_modal')[0].reset();
+            state = 'add';
+            $('#popup-title').text('Tambah Aset Dipinjam');
         });
 
         // Custom validation rule for integers greater than 0
@@ -232,10 +249,11 @@
                 category_modal: {
                     required: true,
                 },
-                qty_modal: {
+                user_modal: {
                     required: true,
-                    number: true,
-                    greaterThanZero: true
+                },
+                lcoation_modal: {
+                    required: true,
                 },
                 note_modal: {
                     required: true,
@@ -245,10 +263,11 @@
                 category_modal: {
                     required: "Kategori Asset field wajib diisi.",
                 },
-                qty_modal: {
-                    required: "Quantity field wajib diisi.",
-                    number: "Harap masukan angka yang sesuai.",
-                    greaterThanZero: "Masukan angka lebih besar dari 0."
+                user_modal: {
+                    required: "User field wajib diisi.",
+                },
+                location_modal: {
+                    required: "Location field wajib diisi.",
                 },
                 note_modal: {
                     required: "Description field wajib diisi.",
@@ -308,17 +327,21 @@
         });
 
         $('#gridPinjamAsset tbody').on('click', '#btnDeletePinjamAsset', function() {
-            var row = $(this).closest('tr');
+            row = $(this).closest('tr');
             table.row(row).remove().draw();
         });
 
         $('#gridPinjamAsset tbody').on('click', '#btnEditPinjamAsset', function() {
-            var row = $(this).closest('tr');
+            state = 'edit';
+            $('#popup-title').text('Edit Aset Dipinjam');
+
+            row = $(this).closest('tr');
             var data = table.row(row).data();
 
             $('#category_modal').val(data[0]).change();
-            $('#qty_modal').val(data[2]);
-            $('#note_modal').val(data[3]);
+            $('#user_modal').val(data[2]);
+            $('#location_modal').val(data[4]);
+            $('#note_modal').val(data[5]);
 
             $('#modalPinjamAsset').modal('show');
         });
@@ -350,8 +373,10 @@
                     tableData.push({
                         asset_category_id: data[0],
                         category: data[1],
-                        quantity: data[2],
-                        description: data[3]
+                        user_id: data[2],
+                        user: data[3],
+                        location: data[4],
+                        description: data[5]
                     });
                 });
                 var combinedData = {
@@ -390,32 +415,53 @@
                 $("#gridPinjamAsset_error").text("");
                 return true;
             }
-            // abc = "Harap pilih minimal 1 asset.";
             return true;
         }
 
-        // form modal popup
-        $('#btnAddCategoryPeminjaman').click(function() {
+        $('#btnSaveCategoryPeminjaman').click(function() {
             if ($("#form_modal").valid()) {
                 var categoryId = $('#category_modal option:selected').val();
                 var category = $('#category_modal option:selected').text();
-                var qty = $('#qty_modal').val();
+                var userId = $('#user_modal option:selected').val();
+                var user = $('#user_modal option:selected').text();
+                var location = $('#location_modal').val();
                 var note = $('#note_modal').val();
 
-                table.row.add([
-                    categoryId,
-                    category,
-                    qty,
-                    note,
-                    '<div class="btn-group btn-group-sm">' +
-                    '<button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">' +
-                    '<i class="fa fa-pen"></i> Edit' +
-                    '</button>' +
-                    '<button type="button" id="btnDeletePinjamAsset" class="btn btn-danger btn-sm mr-3">' +
-                    '<i class="fa fa-trash"></i> Delete' +
-                    '</button>' +
-                    '</div>'
-                ]).draw(false);
+                if (state == 'add') {
+                    table.row.add([
+                        categoryId,
+                        category,
+                        userId,
+                        user,
+                        location,
+                        note,
+                        '<div class="btn-group btn-group-sm">' +
+                        '<button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">' +
+                        '<i class="fa fa-pen"></i> Edit' +
+                        '</button>' +
+                        '<button type="button" id="btnDeletePinjamAsset" class="btn btn-danger btn-sm mr-3">' +
+                        '<i class="fa fa-trash"></i> Delete' +
+                        '</button>' +
+                        '</div>'
+                    ]).draw(false);
+                } else if (state == 'edit') {
+                    table.row(row).data([
+                        categoryId,
+                        category,
+                        userId,
+                        user,
+                        location,
+                        note,
+                        '<div class="btn-group btn-group-sm">' +
+                        '<button type="button" id="btnEditPinjamAsset" class="btn btn-warning btn-sm mr-3">' +
+                        '<i class="fa fa-pen"></i> Edit' +
+                        '</button>' +
+                        '<button type="button" id="btnDeletePinjamAsset" class="btn btn-danger btn-sm mr-3">' +
+                        '<i class="fa fa-trash"></i> Delete' +
+                        '</button>' +
+                        '</div>'
+                    ]).draw(false);
+                }
 
                 $('#modalPinjamAsset').modal('hide');
             }

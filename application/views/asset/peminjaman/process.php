@@ -50,14 +50,6 @@
                                             <div id="date_error" style="color: red; font-size: 14px;"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="location" class="col-sm-3 col-form-label">Location</label>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control" name="location" value="<?php echo $row->location ?>" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="row">
                                                 <div class="col-sm-12">
@@ -82,7 +74,8 @@
                                                             <th>Id</th>
                                                             <th>Category Id</th>
                                                             <th>Kategori Asset</th>
-                                                            <th>Quantity</th>
+                                                            <th>User</th>
+                                                            <th>Location</th>
                                                             <th>Description</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -95,7 +88,8 @@
                                                                 <td><?php echo $item->id ?></td>
                                                                 <td><?php echo $item->category_id ?></td>
                                                                 <td><?php echo $item->name ?></td>
-                                                                <td><?php echo $item->quantity ?></td>
+                                                                <td><?php echo $item->user_name ?></td>
+                                                                <td><?php echo $item->location ?></td>
                                                                 <td><?php echo $item->description ?></td>
                                                                 <td>
                                                                     <div class="btn-group btn-group-sm">
@@ -180,6 +174,7 @@
                                                             <th>Id</th>
                                                             <th>Code</th>
                                                             <th>Name</th>
+                                                            <th>Category Id</th>
                                                             <th>Category</th>
                                                             <th>Location</th>
                                                             <th>Description</th>
@@ -195,6 +190,7 @@
                                                                 <td><?php echo $item3->id ?></td>
                                                                 <td><?php echo $item3->code ?></td>
                                                                 <td><?php echo $item3->name ?></td>
+                                                                <td><?php echo $item3->category_id ?></td>
                                                                 <td><?php echo $item3->category_name ?></td>
                                                                 <td><?php echo $item3->location ?></td>
                                                                 <td><?php echo $item3->description ?></td>
@@ -228,6 +224,7 @@
                                                             <th>Description</th>
                                                             <th>Photo</th>
                                                             <th>Action</th>
+                                                            <th>Peminjaman Category Id</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -266,6 +263,7 @@
         var row2;
         var rowData;
         var rowData2;
+        let peminjamanCategoryId;
 
         var table = $("#gridPinjamAsset").DataTable({
             "responsive": true,
@@ -275,17 +273,17 @@
                 [5]
             ],
             "dom": '<"top"l>rt<"bottom"ip><"">',
-            // "columnDefs": [{
-            //         "targets": 0,
-            //         "visible": false,
-            //         "searchable": false
-            //     },
-            //     {
-            //         "targets": 1,
-            //         "visible": false,
-            //         "searchable": false
-            //     }
-            // ]
+            "columnDefs": [{
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": 1,
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
         });
 
         var table2 = $("#gridAddAssetPinjam").DataTable({
@@ -366,6 +364,12 @@
                 },
                 {
                     "targets": 7,
+                    "searchable": false,
+                    "orderable": false
+                },
+                {
+                    "targets": 8,
+                    "visible": false,
                     "searchable": false,
                     "orderable": false
                 }
@@ -482,11 +486,10 @@
         $('#gridPinjamAsset tbody').on('click', '#btnAddAssetPeminjaman', function() {
             row = $(this).closest('tr');
             rowData = table.row(row).data();
-
-            $('#id_edit_modal').val(rowData[0]).change();
-            $('#category_edit_modal').val(rowData[1]).change();
-            $('#qty_edit_modal').val(rowData[3]);
-            $('#note_edit_modal').val(rowData[4]);
+            peminjamanCategoryId = rowData[0];
+            let categoryId = rowData[1];
+            table2.column(3).search('^' + categoryId + '$', true, false).draw();
+            table3.column(3).search('^' + categoryId + '$', true, false).draw();
 
             $('#modalAddAssetPeminjaman').modal('show');
         });
@@ -515,7 +518,8 @@
                 table3.rows().every(function(rowIdx, tableLoop, rowLoop) {
                     var data = this.data();
                     tableData.push({
-                        id: data[0]
+                        id: data[0],
+                        peminjamanCategoryId: data[8]
                     });
                 });
                 var combinedData = {
@@ -562,7 +566,8 @@
                 rowData2[4], // Location
                 rowData2[5], // Description
                 rowData2[6],
-                '<div class="btn-group btn-group-sm"><button type="button" class="btn btn-danger btn-sm mr-3" onclick="removeRow(this)"><i class="fa fa-trash"></i> Remove</button></div>'
+                '<div class="btn-group btn-group-sm"><button type="button" class="btn btn-danger btn-sm mr-3" onclick="removeRow(this)"><i class="fa fa-trash"></i> Remove</button></div>',
+                peminjamanCategoryId,
             ]).draw(false);
 
             // Disable the button after clicking

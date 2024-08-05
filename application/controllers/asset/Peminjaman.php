@@ -74,7 +74,8 @@ class Peminjaman extends CI_Controller
         $userLogInName = $this->session->userdata('logged_in')['name'];
         $data = array(
             'userLogInName' => $userLogInName,
-            'assetCategories' => $this->Asset_model->get_all_asset_category()
+            'assetCategories' => $this->Asset_model->get_all_asset_category(),
+            'users' => $this->Auth_model->get_all_active_users()
         );
 
         $this->load->view('qr/template/header');
@@ -100,7 +101,7 @@ class Peminjaman extends CI_Controller
         $data = array(
             'start_date' => $_POST['start_date'],
             'end_date' => $_POST['end_date'],
-            'location' => $_POST['location'],
+            // 'location' => $_POST['location'],
             'description' => $_POST['description'],
             'status' => $_POST['status'],
             'created_by' => $user_id,
@@ -113,7 +114,8 @@ class Peminjaman extends CI_Controller
             $asset_data = array(
                 'peminjaman_id' => $peminjaman_id,
                 'asset_category_id' => $row['asset_category_id'],
-                'quantity' => $row['quantity'],
+                'user_id' => $row['user_id'],
+                'location' => $row['location'],
                 'description' => $row['description'],
                 'created_by' => $user_id,
                 'created_at' => date('Y-m-d H:i:s'),
@@ -132,11 +134,6 @@ class Peminjaman extends CI_Controller
     public function edit($id)
     {
         $id_log = decode_id($id);
-
-        // $categories = $this->Peminjaman_model->get_peminjaman_category($id_log);
-        // $category_ids = array_map(function ($category) {
-        //     return $category->id;
-        // }, $categories);
 
         $data = array(
             'row' => $this->Peminjaman_model->get($id_log),
@@ -257,11 +254,19 @@ class Peminjaman extends CI_Controller
     {
         $id_log = decode_id($id);
 
+        $categories = $this->Peminjaman_model->get_peminjaman_category($id_log);
+        $category_ids = array();
+        foreach ($categories as $category) {
+            $category_ids[] = $category->category_id;
+        }
+
+        $assetDropdown = $this->Asset_model->get_all_active_asset_peminjaman($category_ids);
+
         $data = array(
             'row' => $this->Peminjaman_model->get($id_log),
-            'categories' => $this->Peminjaman_model->get_peminjaman_category($id_log),
+            'categories' => $categories,
             'assets' => $this->Peminjaman_model->get_peminjaman_category_asset($id_log),
-            'assetDropdown' => $this->Asset_model->get_all_active_asset_peminjaman()
+            'assetDropdown' => $assetDropdown
         );
 
         $this->load->view('qr/template/header');
@@ -310,9 +315,9 @@ class Peminjaman extends CI_Controller
                 $this->db->where('id', $id);
                 $this->db->update('peminjaman', $data);
             } else {
-                $get_peminjaman = $this->Peminjaman_model->get($id);
                 foreach ($table_data as $row) {
                     $get_asset = $this->Asset_model->get_asset($row['id']);
+                    $get_peminjaman_category = $this->Peminjaman_model->get_peminjaman_category_by_id($row['peminjamanCategoryId']);
                     if ($get_asset->status != 'Active' || !empty($get_asset->user)) {
                         $response = array(
                             'status' => 'error',
@@ -322,9 +327,9 @@ class Peminjaman extends CI_Controller
                         return;
                     } else {
                         $data_asset = array(
-                            'user' => $get_peminjaman->created_by_name,
+                            'user' => $get_peminjaman_category->user_name,
                             'updated_at' => date('Y-m-d H:i:s'),
-                            'id_user' => $user_id,
+                            'id_user' => $get_peminjaman_category->user_id,
                         );
                         $this->db->where('id', $row['id']);
                         $this->db->update('3_asset', $data_asset);
@@ -336,16 +341,17 @@ class Peminjaman extends CI_Controller
                             'name' => $get_asset->name,
                             'year_acq' => $get_asset->year_acq,
                             'status' => $get_asset->status,
-                            'user' => $get_peminjaman->created_by_name,
-                            'location' => $get_peminjaman->location,
+                            'user' => $get_peminjaman_category->user_name,
+                            'location' => $get_peminjaman_category->location,
                             'description' => $get_asset->description,
                             'created_at' => date('Y-m-d H:i:s'),
-                            'id_user' => $user_id
+                            'id_user' => $get_peminjaman_category->user_id
                         );
                         $this->db->insert('3_log_asset', $data_log_asset);
 
                         $data_peminjaman_list_asset = array(
                             'peminjaman_id' => $id,
+                            'peminjaman_category_id' => $row['peminjamanCategoryId'],
                             'asset_id' => $row['id'],
                             'created_at' => date('Y-m-d H:i:s'),
                             'created_by' => $user_id
@@ -372,7 +378,7 @@ class Peminjaman extends CI_Controller
         } catch (Exception $e) {
             $response = array(
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             );
             echo json_encode($response);
         }

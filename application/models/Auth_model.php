@@ -155,6 +155,16 @@ class Auth_model extends CI_Model
             redirect(base_url('auth'));
         }
     }
+
+    public function get_all_active_users()
+    {
+        $this->db->select('a.id, a.name, a.level, a.dept_id');
+        $this->db->from('auth as a');
+        $this->db->where('a.deleted_at', NULL);
+
+        $result = $this->db->get();
+        return $result->result();
+    }
 }
 
 /* End of file Auth_model.php */

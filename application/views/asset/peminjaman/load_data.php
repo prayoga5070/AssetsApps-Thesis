@@ -64,7 +64,7 @@
     <!-- small box -->
     <div class="col-lg-3 col-12">
       <a href="<?= base_url(); ?>asset/peminjaman/add" class="small-box-footer">
-      <div class="small-box bg-primary">
+        <div class="small-box bg-primary">
           <div class="inner text-center">
             <h3>Create</h3>
           </div>

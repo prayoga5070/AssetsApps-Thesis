@@ -147,13 +147,21 @@
                                         </form>
 
                                         <script type="text/javascript" src="<?= base_url('assets/qrcode/qrcode/index.min.js'); ?>"></script>
-                                        <script src="<?= base_url('assets/qrcode/qrcode/jquery-3.5.1.min.js'); ?>"></script>
-
                                         <script>
                                             $(document).ready(function() {
                                                 let selectedDeviceId = null;
                                                 const codeReader = new ZXing.BrowserMultiFormatReader();
                                                 const sourceSelect = $("#pilihKamera");
+
+                                                $('#exampleModal').on('shown.bs.modal', function() {
+                                                    initScanner();
+                                                });
+
+                                                $('#exampleModal').on('hidden.bs.modal', function() {
+                                                    if (codeReader) {
+                                                        codeReader.reset();
+                                                    }
+                                                });
 
                                                 $(document).on('change', '#pilihKamera', function() {
                                                     selectedDeviceId = $(this).val();
@@ -163,28 +171,12 @@
                                                     }
                                                 });
 
-                                                $('#exampleModal').on('shown.bs.modal', function() {
-                                                    console.log('Modal is fully shown');
-                                                    initScanner();
-                                                });
-
-                                                $('#exampleModal').on('hidden.bs.modal', function() {
-                                                    console.log('Modal is fully hidden');
-                                                    if (codeReader) {
-                                                        codeReader.reset();
-                                                    }
-                                                });
-
                                                 function initScanner() {
                                                     loadingOverlay.style.display = 'flex'; // Show the loading overlay
 
                                                     codeReader
                                                         .listVideoInputDevices()
                                                         .then(videoInputDevices => {
-                                                            videoInputDevices.forEach(device =>
-                                                                console.log(`${device.label}, ${device.deviceId}`)
-                                                            );
-
                                                             if (videoInputDevices.length > 0) {
                                                                 if (selectedDeviceId == null) {
                                                                     if (videoInputDevices.length > 1) {
@@ -210,8 +202,6 @@
                                                                 codeReader
                                                                     .decodeOnceFromVideoDevice(selectedDeviceId, 'previewKamera')
                                                                     .then(result => {
-                                                                        console.log(result.text);
-
                                                                         const segments = result.text.split('/');
                                                                         const lastSegment = segments[segments.length - 1];
 
@@ -220,7 +210,6 @@
                                                                             type: 'GET',
                                                                             dataType: 'json',
                                                                             success: function(response) {
-                                                                                console.log(response.asset_code);
                                                                                 $("#code").val(response.asset_code);
                                                                                 $("#exampleModal").modal('hide');
                                                                             },

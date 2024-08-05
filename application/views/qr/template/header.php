@@ -41,6 +41,8 @@ if ($this->session->userdata('logged_in') != true) {
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/select2/css/select2.min.css">
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
+
   <!-- jQuery -->
   <script src="<?= base_url(); ?>assets/qrcode/plugins/jquery/jquery.min.js"></script>
   <!-- jQuery UI 1.11.4 -->
@@ -90,6 +92,34 @@ if ($this->session->userdata('logged_in') != true) {
   <script src="<?= base_url(); ?>assets/qrcode/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="<?= base_url(); ?>assets/qrcode/plugins/datatables-select/js/dataTables.select.min.js"></script>
   <script src="<?= base_url(); ?>assets/qrcode/plugins/select2/js/select2.min.js"></script>
+
+  <script>
+    function ShowParameter(Collapse, ShowParameter, HideParameter) {
+      //var paramSearch = document.getElementById(FullParameter);
+      var showParameter = document.getElementById(ShowParameter);
+      var hideParameter = document.getElementById(HideParameter);
+      var divCollapse = document.getElementById(Collapse);
+
+      divCollapse.style.display = 'block';
+      //$("#" + Collapse).collapse('show');
+      //paramSearch.style.display = 'block';
+      showParameter.style.display = 'none';
+      hideParameter.style.display = 'block';
+    }
+    //--***************************************END SHOW PARAMETER SEARCH ******************************************//
+
+    //--***************************************START HIDE PARAMETER SEARCH ******************************************//
+
+    function HideParameter(Collapse, ShowParameter, HideParameter) {
+      var showParameter = document.getElementById(ShowParameter);
+      var hideParameter = document.getElementById(HideParameter);
+      var divCollapse = document.getElementById(Collapse);
+      divCollapse.style.display = 'none';
+      hideParameter.style.display = 'none';
+      showParameter.style.display = 'block';
+    }
+  </script>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

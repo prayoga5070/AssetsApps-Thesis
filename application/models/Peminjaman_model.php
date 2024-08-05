@@ -60,9 +60,10 @@ class Peminjaman_Model extends CI_Model
 
     public function get_peminjaman_category($id)
     {
-        $this->db->select('a.id, a.quantity, a.description, b.id as category_id, b.name, b.id_department');
+        $this->db->select('a.id, a.quantity, a.description, a.user_id, c.name as user_name, a.location, b.id as category_id, b.name, b.id_department');
         $this->db->from('peminjaman_list_category as a');
         $this->db->join('3_category_asset as b', 'a.asset_category_id = b.id', 'left');
+        $this->db->join('auth as c', 'a.user_id = c.id', 'left');
         $this->db->where('a.peminjaman_id', $id);
         $this->db->where('a.deleted_by', NULL);
         $this->db->where('a.deleted_at', NULL);
@@ -76,14 +77,30 @@ class Peminjaman_Model extends CI_Model
 
     public function get_peminjaman_category_asset($id)
     {
-        $this->db->select('a.id, a.asset_id, a.quantity, b.code, b.name, fa.id as file_id, fa.file_name, fa.file_path');
+        $this->db->select('a.id, a.asset_id, a.quantity, b.code, b.name, fa.id as file_id, fa.file_name, fa.file_path, d.name as user_name');
         $this->db->from('peminjaman_list_asset as a');
         $this->db->join('3_asset as b', 'a.asset_id = b.id', 'left');
         $this->db->join('3_file_asset as fa', 'fa.id_asset = a.id', 'left');
+        $this->db->join('peminjaman_list_category as c', 'a.peminjaman_category_id = c.id', 'left');
+        $this->db->join('auth as d', 'c.user_id = d.id', 'left');
         $this->db->where('a.peminjaman_id', $id);
 
         $result = $this->db->get();
         return $result->result();
+    }
+
+    public function get_peminjaman_category_by_id($id)
+    {
+        $this->db->select('a.id, a.quantity, a.description, a.user_id, c.name as user_name, a.location, b.id as category_id, b.name, b.id_department');
+        $this->db->from('peminjaman_list_category as a');
+        $this->db->join('3_category_asset as b', 'a.asset_category_id = b.id', 'left');
+        $this->db->join('auth as c', 'a.user_id = c.id', 'left');
+        $this->db->where('a.id', $id);
+        $this->db->where('a.deleted_by', NULL);
+        $this->db->where('a.deleted_at', NULL);
+
+        $query = $this->db->get();
+        return $query->row();
     }
 }
 /* End of file Stock_model.php */
