@@ -33,7 +33,8 @@ class Asset extends CI_Controller
         );
 // var_dump($data);exit;
         $this->load->view('qr/template/header');
-      
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
     
         $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset',$data);
