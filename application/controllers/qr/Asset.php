@@ -22,7 +22,7 @@ class Asset extends CI_Controller
             $this->session->userdata('logged_in')['dept'] != 3 &&
             $this->session->userdata('logged_in')['dept'] != 6
         ) {
-            return redirect(base_url('qr/user/asset'));
+            // return redirect(base_url('qr/user/asset'));
         }
     }
 
@@ -33,8 +33,7 @@ class Asset extends CI_Controller
         );
 // var_dump($data);exit;
         $this->load->view('qr/template/header');
-        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
-        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+      
     
         $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset',$data);
