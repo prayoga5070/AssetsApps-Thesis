@@ -33,8 +33,7 @@ class Asset_model extends CI_Model
   public function log_asset($id_asset)
   {
     $result = $this->db->select('a.id, a.code, a.name, a.year_acq, a.status, a.user, a.location, 
-    a.description, a.created_at,a.id_category,c.name as kategoriName')
-      ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
+    a.description, a.created_at')
 
       ->where(['a.id_asset' => $id_asset])->order_by('a.created_at', 'DESC')->get('3_log_asset as a');
 

@@ -49,9 +49,11 @@ class Report extends CI_Controller
             'log' => $this->Asset_model->log_asset($id_log),
             'row' => $this->Asset_model->get_asset($id_log)
         );
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
-        $this->load->view('qr/admin/log_detail');
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
+        $this->load->view('qr/admin/log_detail',$data);
         $this->load->view('qr/template/footer');
     }
 }
