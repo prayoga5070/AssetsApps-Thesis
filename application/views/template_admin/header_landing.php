@@ -13,7 +13,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<link rel="icon" href="<?= base_url(); ?>assets/images/favicon1.png">
-		<title>Portal - PT Mitra Kiara Indonesia</title>
+		<title>Portal</title>
 		<!-- Bootstrap core CSS -->
 		<link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">

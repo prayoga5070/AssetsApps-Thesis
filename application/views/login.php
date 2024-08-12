@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Portal PT MKI - Login</title>
+    <title>Assets App - Login</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(); ?>assets1/images/favicon1.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(); ?>assets/images/favicon.webp">
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
     <link href="<?= base_url(); ?>assets1/2/css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -37,7 +37,7 @@
                     <div class="form-input-content">
                         <div class="card login-form mb-0">
                             <div class="card-body pt-5">
-                                <a class="text-center" href="<?php echo base_url(); ?>"> <h4>Portal PT Mitra Kiara Indonesia - Login</h4></a> 
+                                <a class="text-center" href="<?php echo base_url(); ?>"> <h4>Assets App - Login</h4></a> 
                                 <form class="mt-5 mb-5 login-input" action="<?php echo base_url(); ?>auth/validate" method="post">
                                         <?php echo $this->session->flashdata('msg'); ?>
                                     <div class="form-group">

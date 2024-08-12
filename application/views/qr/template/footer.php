@@ -1,5 +1,5 @@
  <footer class="main-footer">
-   <strong>Copyright &copy;2024 <a href="https://portal-mki.com">PT Mitra Kiara Indonesia</a>.</strong>
+   <strong>Copyright &copy;2024 <a href="#">PT XYZ</a>.</strong>
  </footer>
 
  <!-- Control Sidebar -->

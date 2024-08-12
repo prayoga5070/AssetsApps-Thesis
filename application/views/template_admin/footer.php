@@ -3,7 +3,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright &copy;Developed by IT PT MKI</a> 2023</p>
+                <p>Copyright &copy;</a> 2024</p>
             </div>
         </div>
         <!--**********************************
