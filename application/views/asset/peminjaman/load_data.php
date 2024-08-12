@@ -36,6 +36,9 @@
               <input type="text" class="form-control" name="created_by">
             </div>
           </div>
+
+        </div>
+        <div class="col-md-6">
           <div class="form-group row">
             <label for="status" class="col-sm-2 col-form-label">Status</label>
             <div class="col-sm-10">
@@ -50,10 +53,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group col-md-6">
-            <button type="submit" class="btn btn-primary text-right">Search</button>
-          </div>
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;">Search</button>
         </div>
       </div>
     </form>

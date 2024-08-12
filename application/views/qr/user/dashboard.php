@@ -31,17 +31,89 @@
       </a>
     </div>
 </div>
-<!-- /.row -->
-<!-- Main row -->
-<div class="row">
-  <!-- Left col -->
-  <section class="col-lg-12">
-    <!-- Custom tabs (Charts with tabs)-->
-  </section>
-  <!-- /.Left col -->
+<section class="col-lg-12">
+
+
+  <!-- Custom tabs (Charts with tabs)-->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <i class="fas fa-chart-pie mr-1"></i>
+        Data Asset
+      </h3>
+      <div class="card-body">
+        <table id="dashboard1" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Kode</th>
+              <th>Kategori</th>
+              <th>Nama</th>
+              <th>User</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+
+        </table>
+      </div><!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.Left col -->
 </div>
 <!-- /.row (main row) -->
 </div><!-- /.container-fluid -->
 </section>
+
+<script>
+  $(document).ready(function() {
+    list();
+    $('#dashboard1').on('length.dt', function(e, settings, len) {
+      localStorage.dataTablePageLength = len;
+    });
+
+  });
+
+  function list() {
+    if (localStorage.dataTablePageLength) {
+      pageLength = localStorage.dataTablePageLength;
+    } else {
+      pageLength = 10;
+    }
+    $table = $("#dashboard1").find('tbody');
+    if ($.fn.DataTable.isDataTable("#dashboard1")) {
+      $('#dashboard1').DataTable().clear().destroy();
+    }
+    var table = $("#dashboard1").DataTable({
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "processing": true,
+      "serverSide": true,
+      "language": {
+        "infoFiltered": ""
+      },
+
+      "ajax": {
+        "url": '<?= base_url() ?>' + 'qr/asset/tableDataDashboard',
+        "type": "POST",
+        "data": function(d) {
+          return $.extend({}, d, {
+            "locationAsset": $('#locationAsset').val(),
+            "nameAsset": $('#nameAsset').val(),
+            "kodeAsset": $('#kodeAsset').val(),
+            "kategori": $('#kategoriAsset').val(),
+            "userAsset": $('#userAsset').val()
+          });
+        }
+      },
+    });
+  }
+
+  function resetForm() {
+    document.getElementById("filter").reset();
+
+    list();
+  }
+</script>
 <!-- /.content -->
 </div>
