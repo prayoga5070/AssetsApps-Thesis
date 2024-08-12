@@ -42,16 +42,16 @@ class Auth_model extends CI_Model
 
                     switch ($level) {
                         case 1:
-                            redirect(base_url('superadmin/manage'), 'refresh');
+                            redirect(base_url('qr/dashboard'), 'refresh');
                             break;
                         case 2:
-                            redirect(base_url('portal'), 'refresh');
+                            redirect(base_url('qr/dashboard'), 'refresh');
                             break;
                         case 3:
-                            redirect(base_url('portal'), 'refresh');
+                            redirect(base_url('qr/dashboard'), 'refresh');
                             break;
                         case 4:
-                            redirect(base_url('portal'), 'refresh');
+                            redirect(base_url('qr/dashboard'), 'refresh');
                             break;
 
 
