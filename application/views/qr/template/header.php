@@ -9,7 +9,7 @@ if ($this->session->userdata('logged_in') != true) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AssetsApp | MKI</title>
+  <title>AssetsApp</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -32,7 +32,7 @@ if ($this->session->userdata('logged_in') != true) {
   <!-- summernote -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/summernote/summernote-bs4.min.css">
   <!-- favicon png -->
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(); ?>assets/qrcode/images/favicon/favicon1.png">
+  <link rel="icon" sizes="16x16" href="<?= base_url(); ?>assets/images/favicon.webp">
   <!-- DataTables -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/qrcode/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -127,7 +127,7 @@ if ($this->session->userdata('logged_in') != true) {
 
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="<?= base_url(); ?>assets/qrcode/images/favicon/favicon1.png" alt="AdminLTELogo" height="60" width="60">
+      <img class="animation__shake" src="<?= base_url(); ?>assets/images/favicon.webp" alt="AdminLTELogo" height="60" width="60">
     </div>
 
     <!-- Navbar -->

@@ -53,6 +53,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="input-group">
+
                                         <label class="col-md-3">Kategori</label>
 
                                         <div class="col-sm-9">
@@ -63,6 +64,7 @@
                                                 ?>
                                                     <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
                                                 <?php } ?>
+
                                             </select>
                                         </div>
                                     </div>
@@ -70,6 +72,7 @@
 
                             </div>
                             <div class=" col-md-6">
+
 
                                 <div class="form-group row">
                                     <div class="input-group">
@@ -100,10 +103,12 @@
                                                 <option value="Active">Active</option>
                                                 <option value="Inactive">Inactive</option>
                                             </select>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
                     </form>
@@ -115,6 +120,7 @@
                         <button type="button" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="list()">Search</button>
                     </div>
                 </div>
+
                 <div><br /></div>
                 <!-- Custom tabs (Charts with tabs)-->
                 <div class="card">
