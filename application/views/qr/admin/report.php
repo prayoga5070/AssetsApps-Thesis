@@ -53,18 +53,26 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="input-group">
-                                        <label class="col-md-3">Status</label>
-                                        <div class="col-sm-9">
 
-                                            <select id="status-data" name="statusAsset" class="form-control select2">
-                                                <option value="">-- ALL STATUS --</option>
+                                        <label class="col-md-3">Kategori</label>
+
+                                        <div class="col-sm-9">
+                                            <select id="kategoriAsset" class="form-control">
+                                                <option value="">-- Pilih Kategori --</option>
+                                                <?php
+                                                foreach ($assetCategories as $row) {
+                                                ?>
+                                                    <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                                                <?php } ?>
 
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class=" col-md-6">
+
 
                                 <div class="form-group row">
                                     <div class="input-group">
@@ -83,19 +91,36 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <div class="input-group">
+                                        <label class="col-md-3">Status</label>
+                                        <div class="col-sm-9">
+
+                                            <select id="statusAsset" name="statusAsset" class="form-control select2">
+                                                <option value="">-- ALL STATUS --</option>
+                                                <option value="Maintenance">Maintenance</option>
+                                                <option value="Writeoff">Writeoff</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
 
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-12 mt-3">
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="exportToExcel()">Export to Excel</button>
+
+                <div class="row">
+                    <div class="col-lg-12 mt-3">
+                        <button type="button" class="btn btn-sm btn-secondary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="resetForm()">Reset</button>
+                        <button type="button" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="list()">Search</button>
+                    </div>
                 </div>
-                <div class="col-lg-12 mt-3">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-                    <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-                </div>
+
                 <div><br /></div>
                 <!-- Custom tabs (Charts with tabs)-->
                 <div class="card">
@@ -105,10 +130,14 @@
                             Data Assets
                         </h3>
                         <div class="card-body">
+                            <div class="col-lg-12 mt-3">
+                                <button type="button" class="btn btn-sm btn-secondary" onclick="exportToExcel()">Export to Excel</button>
+                            </div>
                             <table id="report" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Kode Asset</th>
+                                        <th>Kategori Asset</th>
                                         <th>Nama Asset</th>
                                         <th>Status</th>
                                         <th>User</th>
@@ -165,6 +194,8 @@
                         "locationAsset": $('#locationAsset').val(),
                         "nameAsset": $('#nameAsset').val(),
                         "kodeAsset": $('#kodeAsset').val(),
+                        "kategori": $('#kategoriAsset').val(),
+
                         "userAsset": $('#userAsset').val()
                     });
                 }

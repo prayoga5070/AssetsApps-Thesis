@@ -22,27 +22,35 @@ class Asset extends CI_Controller
             $this->session->userdata('logged_in')['dept'] != 3 &&
             $this->session->userdata('logged_in')['dept'] != 6
         ) {
-            return redirect(base_url('qr/user/asset'));
+            // return redirect(base_url('qr/user/asset'));
         }
     }
 
     public function setup()
     {
-        // $data = array(
-        //     'get_all_asset' => $this->Asset_model->get_all_asset()
-        // );
-
+        $data = array(
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
+        );
+// var_dump($data);exit;
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
-        $this->load->view('qr/admin/asset');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+    
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
+        $this->load->view('qr/admin/asset',$data);
         $this->load->view('qr/template/footer');
     }
 
     public function add()
     {
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
-        $this->load->view('qr/admin/add');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $data = array(
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
+        );
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
+        $this->load->view('qr/admin/add',$data);
         $this->load->view('qr/template/footer');
     }
 
@@ -50,10 +58,13 @@ class Asset extends CI_Controller
     {
         $id_asset = decode_id($id);
         $data = array(
-            'row' => $this->Asset_model->get_asset($id_asset)
+            'row' => $this->Asset_model->get_asset($id_asset),
+            'assetCategories' => $this->Asset_model->get_all_asset_category()
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/edit', $data);
         $this->load->view('qr/template/footer');
     }
@@ -62,7 +73,8 @@ class Asset extends CI_Controller
     {
         // Edit : Params with link QR
         // get path assets
-        $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
+        $path=base_url('qr/asset/scan_detail');
+        // $path = $this->db->select('link')->where(['code' => 'scan_link'])->get('3_asset_path')->row()->link;
         $param = $path . "/" . $qrcode;
         qrcode::png(
             $param,
@@ -84,8 +96,8 @@ class Asset extends CI_Controller
         $this->form_validation->set_rules('name', 'Name Asset', 'required');
         $this->form_validation->set_rules('year_acq', 'Tahun Akuisisi', 'required');
         $this->form_validation->set_rules('status', 'Status', 'required');
-        $this->form_validation->set_rules('user', 'User', 'required');
-        $this->form_validation->set_rules('location', 'Location', 'required');
+        // $this->form_validation->set_rules('user', 'User', 'required');
+        // $this->form_validation->set_rules('location', 'Location', 'required');
         $this->form_validation->set_rules('qr_code', 'QR Code', 'is_unique[aset.qrcode]');
 
         if ($this->form_validation->run() != false) {
@@ -97,6 +109,7 @@ class Asset extends CI_Controller
             $data = array(
                 'code' => $this->input->post('code'),
                 'name' => $this->input->post('name'),
+                'id_category' => $this->input->post('id_category'),
                 'year_acq' => $this->input->post('year_acq'),
                 'status' => $this->input->post('status'),
                 'user' => $this->input->post('user'),
@@ -141,7 +154,9 @@ class Asset extends CI_Controller
             return redirect(base_url('qr/asset/setup'));
         } else {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+            $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+            $this->load->view('qr/template/sidebar_admin', $dataMenu);
             $this->load->view('qr/admin/add');
             $this->load->view('qr/template/footer');
         }
@@ -154,6 +169,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -191,6 +207,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -221,6 +238,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['status'];
             $row[] =  $list['user'];
@@ -244,6 +262,7 @@ class Asset extends CI_Controller
         foreach ($data['data'] as $list) {
             $row = [];
             $row[] = $list['code'];
+            $row[] =  $list['kategoriName'];
             $row[] =  $list['name'];
             $row[] =  $list['user'];
             $row[] =  $list['location'];
@@ -298,8 +317,8 @@ class Asset extends CI_Controller
         $this->form_validation->set_rules('name', 'Name Asset', 'required');
         $this->form_validation->set_rules('year_acq', 'Tahun Akuisisi', 'required');
         $this->form_validation->set_rules('status', 'Status', 'required');
-        $this->form_validation->set_rules('user', 'User', 'required');
-        $this->form_validation->set_rules('location', 'Location', 'required');
+        // $this->form_validation->set_rules('user', 'User', 'required');
+        // $this->form_validation->set_rules('location', 'Location', 'required');
 
         $id = $this->input->post('id');
 
@@ -351,7 +370,9 @@ class Asset extends CI_Controller
             return redirect(base_url('qr/asset/setup'));
         } else {
             $this->load->view('qr/template/header');
-            $this->load->view('qr/template/sidebar_admin');
+            $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+            $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+            $this->load->view('qr/template/sidebar_admin', $dataMenu);
             $this->load->view('qr/admin/edit');
             $this->load->view('qr/template/footer');
         }
@@ -385,7 +406,9 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->get_asset($id_asset)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin', $data);
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/detail', $data);
         $this->load->view('qr/template/footer');
     }
@@ -394,7 +417,9 @@ class Asset extends CI_Controller
     public function scan()
     {
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/scan');
         $this->load->view('qr/template/footer');
     }
@@ -405,7 +430,9 @@ class Asset extends CI_Controller
             'row' => $this->Asset_model->asset_qr($id)
         );
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/view', $data);
         $this->load->view('qr/template/footer');
     }
@@ -417,6 +444,7 @@ class Asset extends CI_Controller
         $header = [
             array(
                 "Kode Asset",
+                "Kategori",
                 "Nama Asset",
                 "Year Acquisation",
                 "Status",
@@ -435,56 +463,65 @@ class Asset extends CI_Controller
     {
         $assetModel = new Asset_model();
         $originfile = null;
-        if ($_FILES) {
-            $originfile = $_FILES['fileFoto'];
-        }
-        $path = 'uploads/assetsqr/';
+        $data = [];
         $countFile = 0;
-
         $notFounded = "";
-        if (isset($originfile) && $originfile['name'][0] !== '') {
-            if (is_array($originfile)) {
-                for ($i = 0; $i < sizeOf($originfile['name']); $i++) {
-                    $originFileName = str_replace(" ", "_", $originfile['name'][$i]);
-                    $filenameList = (explode(".", $originfile['name'][$i]));
-                    $filesize = $originfile['size'][$i];
-                    $tempFile = $originfile['tmp_name'][$i] . '/' . $originfile['name'][$i];
+        try {
+            if ($_FILES) {
 
-                    $dataDetail = $assetModel->asset_code($filenameList[0]);
-                    if (isset($dataDetail)) {
-                        $year = date("Y");
-                        $month = date("m");
-                        $date = date("d");
-                        $hour = date("H");
-                        $minutes = date("i");
-                        $second = date("s");
-                        $newName = $date . "" . $month . "" . $year . "" . $hour . "" . $minutes . "" . $second . "_" . $originFileName;
-                        $dirFile = $path . $year . "-" . $month . "-" . $date  . "/";
-                        if (!file_exists($dirFile)) {
-                            mkdir($dirFile, 0777, true);
+                $originfile = $_FILES['fileFoto'];
+
+                $path = 'uploads/assetsqr/';
+
+                if (isset($originfile) && $originfile['name'][0] !== '') {
+                    if (is_array($originfile)) {
+                        for ($i = 0; $i < sizeOf($originfile['name']); $i++) {
+                            $originFileName = str_replace(" ", "_", $originfile['name'][$i]);
+                            $filenameList = (explode(".", $originfile['name'][$i]));
+                            $filesize = $originfile['size'][$i];
+                            $tempFile = $originfile['tmp_name'][$i] . '/' . $originfile['name'][$i];
+
+                            $dataDetail = $assetModel->asset_code($filenameList[0]);
+                            if (isset($dataDetail)) {
+                                $year = date("Y");
+                                $month = date("m");
+                                $date = date("d");
+                                $hour = date("H");
+                                $minutes = date("i");
+                                $second = date("s");
+                                $newName = $date . "" . $month . "" . $year . "" . $hour . "" . $minutes . "" . $second . "_" . $originFileName;
+                                $dirFile = $path . $year . "-" . $month . "-" . $date  . "/";
+                                if (!file_exists($dirFile)) {
+                                    mkdir($dirFile, 0777, true);
+                                }
+                                move_uploaded_file($originfile['tmp_name'][$i], $dirFile . $newName);
+                                // $filepathSave=
+                                $data1 = [
+                                    'id_asset' => $dataDetail->id,
+                                    'file_path' => trim($dirFile, "/"),
+                                    'file_name' => $newName,
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                    'deleted_at' => NULL,
+                                ];
+                                $this->db->insert('3_file_asset', $data1);
+                                $countFile++;
+                            } else {
+                                $notFounded .= "File Foto dengan Kode Asset " . $filenameList[0] . " Tidak Ditemukan";
+                                $notFounded .= '<br/>';
+                            }
                         }
-                        move_uploaded_file($originfile['tmp_name'][$i], $dirFile . $newName);
-                        // $filepathSave=
-                        $data1 = [
-                            'id_asset' => $dataDetail->id,
-                            'file_path' => trim($dirFile, "/"),
-                            'file_name' => $newName,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'deleted_at' => NULL,
-                        ];
-                        $this->db->insert('3_file_asset', $data1);
-                        $countFile++;
-                    } else {
-                        $notFounded .= "File Foto dengan Kode Asset " . $filenameList[0] . " Tidak Ditemukan";
-                        $notFounded .= '<br/>';
                     }
                 }
             }
+        } catch (\Exception $th) {
+            $notFounded .= "Upload Failed :" . $th;
+            $notFounded .= '<br/>';
+            var_dump($notFounded);
+            exit;
         }
-
         //result untuk notif
-        $data = [];
+
         $data['notif'] = 'Upload ' . $countFile . ' File Success';
         if (isset($notFounded)) {
             $data['notif'] .= '<br/>';
@@ -492,7 +529,9 @@ class Asset extends CI_Controller
             $data['notif'] .= $notFounded;
         }
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
     }
@@ -508,6 +547,7 @@ class Asset extends CI_Controller
         $header = [
             array(
                 "Kode Asset",
+                "Kategori",
                 "Nama Asset",
                 "Year Acquisation",
                 "Status",
@@ -540,9 +580,23 @@ class Asset extends CI_Controller
                                 }
                                 if ((!isset($dataloop[0])
                                     || $dataloop[0] == '')) {
-                                        $notFounded .= "Kode Asset In Row " . ($counter - 1) . " Tidak Terisi";
-                                        $notFounded .= "<br/>";
-                                        continue;
+                                    $notFounded .= "Kode Asset In Row " . ($counter - 1) . " Tidak Terisi";
+                                    $notFounded .= "<br/>";
+                                    continue;
+                                }
+                                if ((!isset($dataloop[1])
+                                    || $dataloop[1] == '')) {
+                                    $notFounded .= "Katgori Asset In Row " . ($counter - 1) . " Tidak Terisi";
+                                    $notFounded .= "<br/>";
+                                    continue;
+                                }
+                                $dataKategori = $assetModel->get_one_category($dataloop[1]);
+                                // var_dump($dataloop[1]);
+                                // var_dump($dataKategori);exit;
+                                if (!isset($dataKategori)) {
+                                    $notFounded .= "Kategori Asset " . $dataloop[1] . " In Row " . ($counter - 1) . " Already Exist";
+                                    $notFounded .= "<br/>";
+                                    continue;
                                 }
                                 $dataDetail = $assetModel->asset_code($dataloop[0]);
                                 if (isset($dataDetail)) {
@@ -550,16 +604,16 @@ class Asset extends CI_Controller
                                     $notFounded .= "<br/>";
                                     continue;
                                 }
-                                if ((isset($dataloop[4])
-                                    && $dataloop[4] != '')) {
-                                    if ((!isset($dataloop[5]))) {
+                                if ((isset($dataloop[5])
+                                    && $dataloop[6] != '')) {
+                                    if ((!isset($dataloop[6]))) {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " location tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;
                                     }
                                 }
-                                if ((isset($dataloop[5]) && $dataloop[5] != '')) {
-                                    if (!isset($dataloop[4])) {
+                                if ((isset($dataloop[6]) && $dataloop[5] != '')) {
+                                    if (!isset($dataloop[5])) {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " User tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;
@@ -569,19 +623,20 @@ class Asset extends CI_Controller
                                 $id_user = $this->session->userdata('logged_in')['id'];
                                 $data = array(
                                     'code' => $dataloop[0],
-                                    'name' => $dataloop[1],
-                                    'year_acq' => $dataloop[2],
-                                    'status' => $dataloop[3],
-                                    'user' => $dataloop[4],
-                                    'location' => $dataloop[5],
+                                    'id_category'=>$dataKategori[0]->id,
+                                    'name' => $dataloop[2],
+                                    'year_acq' => $dataloop[3],
+                                    'status' => $dataloop[4],
+                                    'user' => $dataloop[5],
+                                    'location' => $dataloop[6],
                                     'qrcode' => $random,
-                                    'description' => $dataloop[6],
+                                    'description' => $dataloop[7],
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                     'deleted_at' => NULL,
                                     'id_user' => $id_user
                                 );
-                                // $this->db->insert('3_asset', $data);
+                                $this->db->insert('3_asset', $data);
                                 $counterSaved++;
                             }
                         } else {
@@ -602,8 +657,46 @@ class Asset extends CI_Controller
             $data['notif'] .= $notFounded;
         }
         $this->load->view('qr/template/header');
-        $this->load->view('qr/template/sidebar_admin');
+        $dataMenu['list_menu'] = $this->Navigation_model->get_menu();
+        $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
+        $this->load->view('qr/template/sidebar_admin', $dataMenu);
         $this->load->view('qr/admin/asset', $data);
         $this->load->view('qr/template/footer');
+    }
+    public function exportToExcel()
+    {
+        $assetModel = new Asset_model();
+        $_REQUEST['length'] = -1;
+        $data = $assetModel->GetData($_REQUEST);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Code');
+        $sheet->setCellValue('B1', 'Kategori Name');
+        $sheet->setCellValue('C1', 'Name');
+        $sheet->setCellValue('D1', 'Status');
+        $sheet->setCellValue('E1', 'User');
+        $sheet->setCellValue('F1', 'Location');
+
+        $row = 2;
+        foreach ($data['data'] as $item) {
+            $sheet->setCellValue('A' . $row, $item['code']);
+            $sheet->setCellValue('B' . $row, $item['kategoriName']);
+            $sheet->setCellValue('C' . $row, $item['name']);
+            $sheet->setCellValue('D' . $row, $item['status']);
+            $sheet->setCellValue('E' . $row, $item['user']);
+            $sheet->setCellValue('F' . $row, $item['location']);
+            $row++;
+        }
+
+        $filename = 'data_export_' . date('Ymd_His') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 }

@@ -26,7 +26,7 @@
         <div class="form-group col-md-6 row ml-auto">
           <label for="created_at" class="col-sm-2 col-form-label">Tanggal</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" name="created_at" id="datepick1" placeholder="Select date">
+            <input type="text" class="form-control datepick1" name="created_at" placeholder="Select date">
           </div>
         </div>
         <div class="form-group col-md-6 row ml-auto">
@@ -65,11 +65,11 @@
 
     <!-- /.row -->
     <!-- small box -->
-    <div class="col-lg-1 col-12">
+    <div class="col-lg-3 col-12">
       <a href="<?= base_url(); ?>asset/maintenance/add" class="small-box-footer">
-        <div class="small-box bg-success">
+        <div class="small-box bg-primary">
           <div class="inner text-center">
-            <h5>Create</h5>
+            <h3>Create</h3>
           </div>
         </div>
       </a>
@@ -112,7 +112,7 @@
                           <a href="<?php echo base_url(); ?>asset/maintenance/view/<?php echo encode_id($row->id); ?>" class="btn btn-info btn-sm mr-3">
                             <i class="fa fa-eye"></i> View
                           </a>
-                          <?php if ($user_id == 2) : ?>
+                          <?php if ($user_level == 4) : ?>
                             <a href="<?php echo base_url(); ?>asset/maintenance/edit/<?php echo encode_id($row->id); ?>" class="btn btn-info btn-sm <?php echo ($row->status == 'Done') ? 'disabled' : ''; ?>">
                               <i class="fa fa-edit"></i> Process
                             </a>

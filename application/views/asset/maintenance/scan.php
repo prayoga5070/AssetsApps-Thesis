@@ -45,8 +45,6 @@
                             </form>
 
                             <script type="text/javascript" src="<?= base_url('assets/qrcode/qrcode/index.min.js'); ?>"></script>
-                            <script src="<?= base_url('assets/qrcode/qrcode/jquery-3.5.1.min.js'); ?>"></script>
-
                             <script>
                                 let selectedDeviceId = null;
                                 const codeReader = new ZXing.BrowserMultiFormatReader();
@@ -64,10 +62,6 @@
                                     codeReader
                                         .listVideoInputDevices()
                                         .then(videoInputDevices => {
-                                            videoInputDevices.forEach(device =>
-                                                console.log(`${device.label}, ${device.deviceId}`)
-                                            );
-
                                             if (videoInputDevices.length > 0) {
 
                                                 if (selectedDeviceId == null) {
@@ -97,7 +91,6 @@
                                                     .decodeOnceFromVideoDevice(selectedDeviceId, 'previewKamera')
                                                     .then(result => {
                                                         //hasil scan
-                                                        console.log(result.text);
                                                         window.location.href = result.text;
                                                     })
                                                     .catch(err => console.error(err));

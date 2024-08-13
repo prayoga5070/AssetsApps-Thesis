@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'portal',
+	'hostname' => 'prayogaa.my.id',
+	'username' => 'praz5775_user',
+	'password' => 'e%#F}+(cEijW',
+	'database' => 'praz5775_portal',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

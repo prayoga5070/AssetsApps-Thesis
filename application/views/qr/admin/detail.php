@@ -34,7 +34,11 @@
             <div class="card-body">
               <div class="form-group">
                 <label>Kode Asset</label>
-                <input type="text" name="code" class="form-control" value="<?php echo $row->code; ?>" readonly>
+                <input type="text" name="code" class="form-control"  value="<?php echo $row->code; ?>" readonly>
+              </div>
+              <div class="form-group">
+                <label>Kategori Asset</label>
+                <input type="text" disabled class="form-control" value="<?php echo $row->kategoriName; ?>">
               </div>
               <div class="form-group">
                 <label>Nama Asset</label>

@@ -13,23 +13,30 @@
        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
          <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-         <li class="nav-item">
-           <a href="<?= base_url(); ?>qr/user/asset" class="nav-link">
-             <i class="nav-icon fas fa-tachometer-alt"></i>
-             <p>
-               Dashboard
-             </p>
-           </a>
-         </li>
-         <li class="nav-header">MENU</li>
-         <li class="nav-item">
-           <a href="<?= base_url(); ?>qr/user/asset/scan" class="nav-link">
-             <i class="fas fa-camera"></i>
-             <p>
-               Scan Asset
-             </p>
-           </a>
-         </li>
+         <?php foreach ($list_menu as $menu) : ?>
+           <li class="nav-item has-treeview <?php if ($menu['Route'] == $this->uri->segment(1, 0)) { ?>menu-open<?php } else { ?><?php } ?>">
+             <a href="#" class="nav-link <?php if ($menu['Route'] == $this->uri->segment(1, 0)) { ?>active<?php } else { ?><?php } ?>">
+               <i class="nav-icon fas fa-tachometer-alt"></i>
+               <p>
+                 <?= $menu['Name']  ?>
+                 <i class="right fas fa-angle-left"></i>
+               </p>
+             </a>
+             <ul class="nav nav-treeview">
+               <?php foreach ($list_sub_menu as $item) :
+                  if ($item['ParentNavigationId'] == $menu['Id']) {
+                ?>
+                   <li class="nav-item">
+                     <a href="<?= base_url($item['Route']) ?>" class="nav-link active">
+                       <i class="far fa-circle nav-icon"></i>
+                       <p><?= $item['Name'] ?></p>
+                     </a>
+                   </li>
+               <?php }
+                endforeach ?>
+             </ul>
+           </li>
+         <?php endforeach ?>
          <li class="nav-header">Akun</li>
          <li class="nav-item">
            <a href="<?= base_url(); ?>auth/logout" class="nav-link">

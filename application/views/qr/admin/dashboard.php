@@ -21,7 +21,81 @@
 
   <!-- Main content -->
   <section class="content">
+
+    <!-- /.row -->
+    <!-- Main row -->
+    <div class="row">
+      <!-- Left col -->
+      <div class="col-lg-12">
+        <form id="filter">
+          <div class="row">
+            <div class=" col-md-6">
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">Kode Asset</label>
+                  <div class="col-sm-9">
+                    <input type="text" id="kodeAsset" class="form-control ">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" id="nameAsset" class="form-control ">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">Kategori</label>
+
+                  <div class="col-sm-9">
+                    <select id="kategoriAsset" class="form-control">
+                      <option value="">-- Pilih Kategori --</option>
+                      <?php
+                      foreach ($assetCategories as $row) {
+                      ?>
+                        <option value=<?php echo $row->id ?>><?php echo $row->name ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class=" col-md-6">
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">User</label>
+                  <div class="col-sm-9">
+                    <input type="text" id="userAsset" class="form-control ">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="input-group">
+                  <label class="col-md-3">Location</label>
+                  <div class="col-sm-9">
+                    <input type="text" id="locationAsset" class="form-control ">
+                  </div>
+
+                </div>
+        </form>
+      </div>
+
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-lg-12 mt-3">
+          <button type="button" class="btn btn-sm btn-secondary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="resetForm()">Reset</button>
+          <button type="button" class="btn btn-sm btn-primary" style="float: right; margin: 5px; padding-left: 50px;padding-right: 50px;" onclick="list()">Search</button>
+        </div>
+      </div>
+    </div>
+
+
     <div class="col-lg-3 col-12">
+      <div><br /></div>
       <!-- small box -->
       <a href="<?= base_url(); ?>qr/asset/scan" class="small-box-footer">
         <div class="small-box bg-primary">
@@ -31,57 +105,7 @@
       </a>
     </div>
 </div>
-<!-- /.row -->
-<!-- Main row -->
-<div class="row">
-  <!-- Left col -->
-  <div class="col-lg-12">
-    <form id="filter">
-      <div class="row">
-        <div class=" col-md-6">
-          <div class="form-group row">
-            <div class="input-group">
-              <label class="col-md-3">Kode Asset</label>
-              <div class="col-sm-9">
-                <input type="text" id="kodeAsset" class="form-control ">
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="input-group">
-              <label class="col-md-3">Name</label>
-              <div class="col-sm-9">
-                <input type="text" id="nameAsset" class="form-control ">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class=" col-md-6">
-          <div class="form-group row">
-            <div class="input-group">
-              <label class="col-md-3">User</label>
-              <div class="col-sm-9">
-                <input type="text" id="userAsset" class="form-control ">
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="input-group">
-              <label class="col-md-3">Location</label>
-              <div class="col-sm-9">
-                <input type="text" id="locationAsset" class="form-control ">
-              </div>
 
-            </div>
-    </form>
-  </div>
-</div>
-<div class="col-lg-12 mt-3">
-  <button type="button" class="btn btn-sm btn-primary" onclick="list()">Cari</button>
-  <button type="button" class="btn btn-sm btn-secondary" onclick="resetForm()">Reset</button>
-  <span class="text-warning ml-4"><i>*Klik "Cari" untuk menampilkan data</i></span>
-</div>
-<div><br /></div>
 <section class="col-lg-12">
 
 
@@ -93,27 +117,17 @@
         Data Asset
       </h3>
       <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
+        <table id="dashboard1" class="table table-bordered table-striped">
           <thead>
             <tr>
               <th>Kode</th>
+              <th>Kategori</th>
               <th>Nama</th>
               <th>User</th>
               <th>Location</th>
             </tr>
           </thead>
-          <tbody>
-            <?php
-            foreach ($get_all_asset as $row) {
-            ?>
-              <tr>
-                <td><?php echo $row->code ?></td>
-                <td><?php echo $row->name ?></td>
-                <td><?php echo $row->user ?></td>
-                <td><?php echo $row->location ?></td>
-              </tr>
-            <?php } ?>
-          </tbody>
+
         </table>
       </div><!-- /.card-body -->
     </div>
@@ -162,6 +176,7 @@
             "locationAsset": $('#locationAsset').val(),
             "nameAsset": $('#nameAsset').val(),
             "kodeAsset": $('#kodeAsset').val(),
+            "kategori": $('#kategoriAsset').val(),
             "userAsset": $('#userAsset').val()
           });
         }
