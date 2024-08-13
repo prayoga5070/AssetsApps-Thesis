@@ -97,12 +97,12 @@
                                         <th>Type</th>
                                         <th>Name</th>
                                         <th>Value</th>
-                                        <th>Order By</th>
+                                        <!-- <th>Order By</th> -->
                                         <th>Status</th>
-                                        <th>Created By</th>
-                                        <th>Created Time</th>
-                                        <th>Updated By</th>
-                                        <th>Updated Time</th>
+                                        <!-- <th>Created By</th> -->
+                                        <!-- <th>Created Time</th> -->
+                                        <!-- <th>Updated By</th> -->
+                                        <!-- <th>Updated Time</th> -->
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -153,12 +153,12 @@ $(document).ready(function () {
             { "data" : "typename" },  // Tampilkan kolom nama_kategori pada table kategori
             { "data" : "name" },  // Tampilkan kolom nama_kategori pada table kategori
             { "data" : "value" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "urutan" },  // Tampilkan kolom subkat pada table sub kategori
+            // { "data" : "urutan" },  // Tampilkan kolom subkat pada table sub kategori
             { "data" : "status" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "createdby"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "createdtime"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "updatedby"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "updatedtime"} // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "createdby"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "createdtime"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "updatedby"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "updatedtime"} // Tampilkan kolomid_kategori pada table kategori
         ],
         "fnInitComplete": function () {
             EnabDisabButton();

@@ -97,13 +97,13 @@
                                         <th>Name</th>
                                         <th>Type</th>
                                         <th>Route</th>
-                                        <th>Order By</th>
+                                        <!-- <th>Order By</th> -->
                                         <th>Allowed Roles</th>
                                         <th>Status</th>
-                                        <th>Created By</th>
+                                        <!-- <th>Created By</th>
                                         <th>Created Time</th>
                                         <th>Updated By</th>
-                                        <th>Updated Time</th>
+                                        <th>Updated Time</th> -->
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -115,18 +115,18 @@
             <!-- /.Left col -->
         </div>
         <!-- /.row (main row) -->
-        </div><!-- /.container-fluid -->
-    </section>
+</div><!-- /.container-fluid -->
+</section>
 <!-- /.content -->
 </div>
 <script>
-let State = "";
-let data;
-$(document).ready(function () {
+    let State = "";
+    let data;
+    $(document).ready(function() {
 
-  });
+    });
 
-  let tabelNavigation = $('#NavigationTable').DataTable({
+    let tabelNavigation = $('#NavigationTable').DataTable({
         "fixedHeader": {
             "header": true
         },
@@ -139,7 +139,7 @@ $(document).ready(function () {
         "autoWidth": true,
         "dom": '<"top"i>rt<"bottom"lp><"clear">', // untuk menghilangkan search global
         "select": true,
-        "drawCallback": function () {
+        "drawCallback": function() {
 
         },
         "order": [
@@ -149,32 +149,47 @@ $(document).ready(function () {
             "url": "<?= base_url('/Configuration/Navigation/getDataNavNew') ?>", // URL file untuk proses select datanya
             "type": "POST",
         },
-        "columns": [
-            { "data" : 'id',"visible": false},
-            { "data" : 'no',"sortable": false},
-            { "data" : "name" },  // Tampilkan kolom nama_kategori pada table kategori
-            { "data" : "typename" },  // Tampilkan kolom nama_kategori pada table kategori
-            { "data" : "route" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "urutan" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "allowedroles" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "status" },  // Tampilkan kolom subkat pada table sub kategori
-            { "data" : "createdby"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "createdtime"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "updatedby"}, // Tampilkan kolomid_kategori pada table kategori
-            { "data" : "updatedtime"} // Tampilkan kolomid_kategori pada table kategori
+        "columns": [{
+                "data": 'id',
+                "visible": false
+            },
+            {
+                "data": 'no',
+                "sortable": false
+            },
+            {
+                "data": "name"
+            }, // Tampilkan kolom nama_kategori pada table kategori
+            {
+                "data": "typename"
+            }, // Tampilkan kolom nama_kategori pada table kategori
+            {
+                "data": "route"
+            }, // Tampilkan kolom subkat pada table sub kategori
+            //  { "data" : "urutan" },  // Tampilkan kolom subkat pada table sub kategori
+            {
+                "data": "allowedroles"
+            }, // Tampilkan kolom subkat pada table sub kategori
+            {
+                "data": "status"
+            }, // Tampilkan kolom subkat pada table sub kategori
+            // { "data" : "createdby"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "createdtime"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "updatedby"}, // Tampilkan kolomid_kategori pada table kategori
+            // { "data" : "updatedtime"} // Tampilkan kolomid_kategori pada table kategori
         ],
-        "fnInitComplete": function () {
+        "fnInitComplete": function() {
             EnabDisabButton();
             initSelect();
         }
     });
 
-  
+
 
     //--------------------------Function untuk melempar parameter search ---------------------//
     //Untuk melempar parameter search
     oTable = $('#NavigationTable').DataTable();
-    $('#BtnSearch').click(function () {
+    $('#BtnSearch').click(function() {
         // oTable.columns(2).search($('#txtTypeSearchParam').val().trim());
         oTable.columns(2).search($('#txtNamaSearchParam').val().trim());
 
@@ -183,7 +198,7 @@ $(document).ready(function () {
     });
 
     //---------------------Function untuk reset data pencarian----------------//
-    $('#BtnClearSearch').click(function () {
+    $('#BtnClearSearch').click(function() {
         // $('#txtTypeSearchParam').val("");
         $('#txtNamaSearchParam').val("");
         // oTable.columns(2).search($('#txtTypeSearchParam').val().trim());
@@ -193,15 +208,15 @@ $(document).ready(function () {
     });
 
     function cekSelectedClassMain() {
-    selectedRows = [];
-    $('#NavigationTable .selected').each(function () {
-        var isi = $(this).index();
-        selectedRows.push(isi);
-    });
+        selectedRows = [];
+        $('#NavigationTable .selected').each(function() {
+            var isi = $(this).index();
+            selectedRows.push(isi);
+        });
     }
 
     function EnabDisabButton() {
-        setTimeout(function () {
+        setTimeout(function() {
             cekSelectedClassMain();
             if (selectedRows.length > 1 || selectedRows.length == 0) {
                 $('#button-edit').addClass('disabled');
@@ -214,8 +229,7 @@ $(document).ready(function () {
                     $('#button-delete').addClass('disabled');
                     $('#button-delete').attr('data-toggle', 'tooltip').attr('title', 'Data yang dipilih kurang dari 1');
                 }
-            }
-            else if (selectedRows.length <= 1) {
+            } else if (selectedRows.length <= 1) {
                 $('#button-edit').removeClass('disabled');
                 $('#button-edit').removeAttr("data-toggle").attr('title', 'Hanya dapat menyunting 1 data');
                 $('#button-view').removeClass('disabled');
@@ -231,7 +245,7 @@ $(document).ready(function () {
     }
 
     function initSelect() {
-        $('#NavigationTable tbody').on('click', 'tr', function (event) {
+        $('#NavigationTable tbody').on('click', 'tr', function(event) {
             switch (event.which) {
                 case 1:
                     EnabDisabButton();
@@ -248,32 +262,32 @@ $(document).ready(function () {
 
     function View() {
         State = "view";
-        $("#NavigationTable .selected").each(function () {
+        $("#NavigationTable .selected").each(function() {
             var rowNode = $('#NavigationTable').find('tbody tr:eq(' + $(this).index() + ')').get(0);
             data = tabelNavigation.row($(rowNode).closest('tr')).data();
         });
-        window.location.href = "<?php echo base_url('Configuration/Navigation/view/'); ?>"+data.id;
+        window.location.href = "<?php echo base_url('Configuration/Navigation/view/'); ?>" + data.id;
     }
 
     function Edit() {
         State = "edit";
-        $("#NavigationTable .selected").each(function () {
+        $("#NavigationTable .selected").each(function() {
             var rowNode = $('#NavigationTable').find('tbody tr:eq(' + $(this).index() + ')').get(0);
             data = tabelNavigation.row($(rowNode).closest('tr')).data();
         });
-        window.location.href = "<?php echo base_url('Configuration/Navigation/edit/'); ?>"+data.id;
+        window.location.href = "<?php echo base_url('Configuration/Navigation/edit/'); ?>" + data.id;
     }
 
     function Delete(id) {
         listSelected = [];
         State = "delete";
-        $("#NavigationTable .selected").each(function () {
+        $("#NavigationTable .selected").each(function() {
             var rowNode = $('#NavigationTable').find('tbody tr:eq(' + $(this).index() + ')').get(0);
             data = tabelNavigation.row($(rowNode).closest('tr')).data();
             listSelected.push(data.id)
         });
 
         var ids = listSelected.toString();
-        window.location.href = "<?php echo base_url('Configuration/Navigation/delete/'); ?>"+ids;
+        window.location.href = "<?php echo base_url('Configuration/Navigation/delete/'); ?>" + ids;
     }
 </script>
