@@ -57,7 +57,7 @@ class Lookup extends CI_Controller {
         $dataMenu['list_sub_menu'] = $this->Navigation_model->get_sub_menu();
 
         $data = array(
-            'row' => $this->Navigation_model->get_lookup($id)
+            'row' => $this->Lookup_model->get_lookup($id)
         );
 
         // var_dump($data);

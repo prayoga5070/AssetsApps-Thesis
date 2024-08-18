@@ -52,36 +52,7 @@
                 <input type="text" name="order" class="form-control" placeholder="Input Urutan Menu">
                 <?php echo '<div style="color: red;font-size: 14px">' . form_error('order') . '</div>'; ?>
               </div>
-              <div class="form-group">
-                <label class="col-md-3 col-form-label">Status</label>
-                <div class="col-md-9">
-                  <div class="input-group">
-                    <input type="radio" name="myradio2" value="1" >&nbsp; Active &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="myradio2" value="0" >&nbsp; Inactive &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  </div>
-                  <?php echo '<div style="color: red;font-size: 14px">' . form_error('myradio2') . '</div>'; ?>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-3 col-form-label">Parent Menu</label>
-                <div class="col-md-9">
-                  <div class="input-group">
-                    <select class="js-example-placeholder-single js-states form-control" id="ParentNavigationId" name="ParentNavigationId" style="width:100%">
-                    <option></option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-3 col-form-label">Roles</label>
-                <div class="col-md-9">
-                  <div class="input-group">
-                    <select class="js-example-placeholder-multiple js-states form-control" id="Roles" name="Roles[]" multiple style="width:100%"></select>
-                  </div>
-                  <?php echo '<div style="color: red;font-size: 14px">' . form_error('Roles') . '</div>'; ?>
-                </div>
-              </div>
-            </div>
+          
             <!-- /.card-body -->
             <div class="card-footer">
               <a href="<?php echo base_url(); ?>Configuration/Navigation/index"><button type="button" class="btn btn-info">Back</button></a>
