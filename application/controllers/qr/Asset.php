@@ -594,7 +594,7 @@ class Asset extends CI_Controller
                                 // var_dump($dataloop[1]);
                                 // var_dump($dataKategori);exit;
                                 if (!isset($dataKategori)) {
-                                    $notFounded .= "Kategori Asset " . $dataloop[1] . " In Row " . ($counter - 1) . " Already Exist";
+                                    $notFounded .= "Kategori Asset " . $dataloop[1] . " In Row " . ($counter - 1) . " Not Exist";
                                     $notFounded .= "<br/>";
                                     continue;
                                 }
@@ -605,15 +605,15 @@ class Asset extends CI_Controller
                                     continue;
                                 }
                                 if ((isset($dataloop[5])
-                                    && $dataloop[6] != '')) {
-                                    if ((!isset($dataloop[6]))) {
+                                    && $dataloop[5] != '')) {
+                                    if ((!isset($dataloop[6])||$dataloop[6]=='')) {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " location tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;
                                     }
                                 }
-                                if ((isset($dataloop[6]) && $dataloop[5] != '')) {
-                                    if (!isset($dataloop[5])) {
+                                if ((isset($dataloop[6]) && $dataloop[6] != '')) {
+                                    if (!isset($dataloop[5])||$dataloop[5]=='') {
                                         $notFounded .= "Kode Asset " . $dataloop[0] . " In Row " . ($counter - 1) . " User tidak terisi";
                                         $notFounded .= "<br/>";
                                         continue;

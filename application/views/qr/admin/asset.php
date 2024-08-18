@@ -78,7 +78,7 @@
                                         <label class="col-md-3">Status</label>
                                         <div class="col-sm-9">
 
-                                            <select id="status-data" name="statusAsset" class="form-control select2">
+                                            <select id="statusAsset" name="statusAsset" class="form-control select2">
                                                 <option value="">-- ALL STATUS --</option>
                                                 <option value="Maintenance">Maintenance</option>
                                                 <option value="Writeoff">Writeoff</option>
