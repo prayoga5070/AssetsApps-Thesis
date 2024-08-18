@@ -98,7 +98,13 @@
                           .then(result => {
                             //hasil scan
                             console.log(result.text);
-                            window.location.href = result.text;
+                            if (!result.text.includes("<?= base_url(''); ?>")) {
+                              alert('Qr Code not Found');
+                            }
+                            else{
+                              window.location.href = result.text;
+
+                            }
                           })
                           .catch(err => console.error(err));
 
