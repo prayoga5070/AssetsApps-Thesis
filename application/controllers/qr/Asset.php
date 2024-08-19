@@ -319,6 +319,12 @@ class Asset extends CI_Controller
                     'updated_at' => date('Y-m-d H:i:s'),
                     'deleted_at' => NULL,
                 ];
+                $dataDelete = [
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'deleted_at' => date('Y-m-d H:i:s'),
+                ];
+                $this->db->where('id_asset', $id);
+                $this->db->update('3_file_asset', $dataDelete);
                 $this->db->insert('3_file_asset', $data1);
             }
 
@@ -473,6 +479,12 @@ class Asset extends CI_Controller
                                     'updated_at' => date('Y-m-d H:i:s'),
                                     'deleted_at' => NULL,
                                 ];
+                                $dataDelete = [
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                    'deleted_at' => date('Y-m-d H:i:s'),
+                                ];
+                                $this->db->where('id_asset', $dataDetail->id);
+                                $this->db->update('3_file_asset', $dataDelete);
                                 $this->db->insert('3_file_asset', $data1);
                                 $countFile++;
                             } else {

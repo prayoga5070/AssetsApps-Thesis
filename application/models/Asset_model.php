@@ -24,7 +24,9 @@ class Asset_model extends CI_Model
       ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
       ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
 
-      ->where(['a.deleted_at' => NULL, 'a.id' => $id])->get('3_asset as a');
+      ->where(['a.deleted_at' => NULL, 'a.id' => $id]) ->order_by('b.id','DESC')
+      ->get('3_asset as a')
+     ;
 
     $data = $result->row();
     return $data;
@@ -47,7 +49,8 @@ class Asset_model extends CI_Model
     a.description, b.file_path, b.file_name,a.id_category,c.name as kategoriName')
       ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
       ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
-      ->where(['a.deleted_at' => NULL, 'a.qrcode' => $qr])->get('3_asset as a');
+      ->where(['a.deleted_at' => NULL, 'a.qrcode' => $qr])->order_by('b.id','DESC')->get('3_asset as a')
+      ;
 
     $data = $result->row();
     return $data;
@@ -59,7 +62,8 @@ class Asset_model extends CI_Model
      a.description, b.file_path, b.file_name,a.id_category,c.name as kategoriName')
       ->join('3_category_asset as c', 'a.id_category = c.id', 'left')
       ->join('3_file_asset as b', 'a.id=b.id_asset', 'left')
-      ->where(['a.deleted_at' => NULL, 'a.code' => $code])->get('3_asset as a');
+      ->where(['a.deleted_at' => NULL, 'a.code' => $code])     ->order_by('b.id','DESC') 
+           ->get('3_asset as a');
 
     $data = $result->row();
     return $data;
@@ -143,7 +147,7 @@ class Asset_model extends CI_Model
     $rResult = $this->db->query($sQuery)->result_array();
 
     // Total data set length
-    $sQuery = "SELECT COUNT(*) FROM $sTable";
+    $sQuery = "SELECT COUNT(*) FROM $sTable join 3_category_asset b on a.id_category = b.id ".  $sWhere;
     $rResultTotal = $this->db->query($sQuery);
     $aResultTotal = $rResultTotal->result_array();
     $tempTotal = array_values($aResultTotal[0]);
@@ -180,7 +184,7 @@ class Asset_model extends CI_Model
   {
     $result = $this->db->select('a.id, a.code, a.name, a.qrcode, a.year_acq, a.status, a.user, a.location, a.description, a.created_at, fa.id as file_id, fa.file_name, fa.file_path, ca.id as category_id, ca.name as category_name')
       ->from('3_asset as a')
-      ->join('3_file_asset as fa', 'fa.id_asset = a.id', 'left')
+      ->join('3_file_asset as fa', 'fa.id_asset = a.id and fa.deleted_at is null', 'left')
       ->join('3_category_asset as ca', 'ca.id = a.id_category', 'left')
       ->where(['a.status' => 'Active'])
       ->group_start()

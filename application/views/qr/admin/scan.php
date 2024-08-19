@@ -55,10 +55,13 @@
                 $(document).on('change', '#pilihKamera', function() {
                   selectedDeviceId = $(this).val();
                   if (codeReader) {
-                    codeReader.reset()
-                    initScanner()
+                    scanningDatas();
                   }
                 })
+                function scanningDatas() {
+                  codeReader.reset()
+                  initScanner()
+                }
 
                 function initScanner() {
                   codeReader
@@ -100,10 +103,11 @@
                             console.log(result.text);
                             if (!result.text.includes("<?= base_url(''); ?>")) {
                               alert('Qr Code not Found');
+                              scanningDatas();
                             }
                             else{
                               window.location.href = result.text;
-
+                           
                             }
                           })
                           .catch(err => console.error(err));

@@ -216,6 +216,7 @@
             "locationAsset": $('#locationAsset').val(),
             "nameAsset": $('#nameAsset').val(),
             "kodeAsset": $('#kodeAsset').val(),
+            "kategori": $('#kategoriAsset').val(),
             "userAsset": $('#userAsset').val()
         };
 
