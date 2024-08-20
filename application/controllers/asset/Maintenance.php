@@ -191,17 +191,11 @@ class Maintenance extends CI_Controller
         $this->form_validation->set_rules('status', 'Status', 'required');
 
         $notes = $this->Maintenance_model->get_all_notes($id_log);
-        $notes_text = '';
-        foreach ($notes as $note) {
-            $notes_text .= $note->created_at . "\n";
-            $notes_text .= $note->status . ' by ' . $note->name . " :\n";
-            $notes_text .= $note->notes . "\n\n";
-        }
 
         $data = array(
             'validation_errors' => validation_errors(),
             'row' => $this->Maintenance_model->get($id_log),
-            'log' => $notes_text,
+            'log' => $notes,
             // 'code' => $this->input->post('code'),
             // 'note' =>  $this->input->post('note'),
             // 'status' =>  $this->input->post('status')
@@ -217,13 +211,22 @@ class Maintenance extends CI_Controller
             $asset = $this->Asset_model->asset_code($this->input->post('code'));
 
             if ($asset) {
-                $data = array(
+                $dataMaintenance = array(
                     'status' => $this->input->post('status'),
                     'updated_by' => $user_id,
                     'updated_at' => date('Y-m-d H:i:s'),
                 );
                 $this->db->where('id', $id_log);
-                $this->db->update('maintenance', $data);
+                $this->db->update('maintenance', $dataMaintenance);
+
+                if ($this->input->post('status') == 'Done') {
+                    $dataAsset = array(
+                        'status' => 'Active',
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    );
+                    $this->db->where('id', $asset->id);
+                    $this->db->update('3_asset', $dataAsset);
+                }
 
                 $notes = array(
                     'maintenance_id' => $id_log,

@@ -522,6 +522,12 @@
                         peminjamanCategoryId: data[8]
                     });
                 });
+
+                if (tableData.length === 0 && status === 'Done') {
+                    alert('Harap pilih minimal 1 item untuk dipinjamkan.')
+                    return;
+                }
+
                 var combinedData = {
                     form: formData,
                     table: tableData
